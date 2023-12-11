@@ -1,4 +1,4 @@
-package com.atya.nutrimate
+package com.ch2ps38.nutrimate
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.atya.nutrimate.ui.theme
+package com.ch2ps38.nutrimate.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
