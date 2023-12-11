@@ -1,4 +1,4 @@
-package com.atya.nutrimate
+package com.ch2ps38 .nutrimate
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.atya.nutrimate.ui.theme.NutriMateTheme
+import com.ch2ps38.nutrimate.ui.theme.NutriMateTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
