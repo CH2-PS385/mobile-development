@@ -22,9 +22,20 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = pSmashedPumpkin,
+    onPrimary = solidWhite,
+
+    secondary = pSinopia,
+    onSecondary = solidWhite,
+
+    tertiary = pNaplesYellow,
+    onTertiary = solidWhite,
+
+    surface = solidWhite,
+    onSurface = neutralColor6
+
+    // I'm still confused about color theme
+    // u could revise if there's something wrong w this setup
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
