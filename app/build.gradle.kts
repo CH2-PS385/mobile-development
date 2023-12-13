@@ -1,14 +1,15 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.atya.nutrimate"
+    namespace = "com.ch2ps385.nutrimate"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.atya.nutrimate"
+        applicationId = "com.ch2ps385.nutrimate"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -61,6 +62,7 @@ dependencies {
 //    implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
+    implementation("com.google.firebase:firebase-auth:22.3.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -71,4 +73,14 @@ dependencies {
 
     // Navigation Library
     implementation ("androidx.navigation:navigation-compose:2.7.5")
+
+    // Firebase Library
+    implementation ("com.google.firebase:firebase-auth-ktx:21.1.0")
+    implementation ("com.google.android.gms:play-services-auth:20.4.1")
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0")
+    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
+
+    implementation ("io.coil-kt:coil-compose:2.2.2")
 }
