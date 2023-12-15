@@ -3,4 +3,31 @@
     <string name="search_hint">Cari apa?</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="calorries_menu">%s kalori</string>
+
+    <string name="not_found">No results found</string>
+
+    <string name="nutrition_facts">Nutritions Facts</string>
+    <string name="callories_detail">Callories</string>
+    <string name="gram_template">%sg</string>
+    <string name="protein">Protein</string>
+    <string name="fat">Fat</string>
+    <string name="carbs">Carbs</string>
+    <string name="fast_food">Fast Food</string>
+    <string name="healthy_food">Healthy Food</string>
+
+    <string name="profile">Profile</string>
+    <string name="name">Daniel Christianto</string>
+    <string name="height_value">175 cm</string>
+    <string name="height_title">HEIGHT</string>
+    <string name="weight_value">67 kg</string>
+    <string name="weight_title">WEIGHT</string>
+    <string name="age_value">27 yr</string>
+    <string name="age_title">AGE</string>
+    <string name="save_changes">Save Changes</string>
+
+    <string name="personal_data">Personal Data</string>
+    <string name="change_preferences">Change Preferences</string>
+    <string name="about">About</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

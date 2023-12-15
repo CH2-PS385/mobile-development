@@ -18,18 +18,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.ch2ps385.nutrimate.presentation.screen.auth.signin.GoogleAuthUiClient
 import com.ch2ps385.nutrimate.presentation.screen.auth.signin.SignInScreen
 import com.ch2ps385.nutrimate.presentation.screen.auth.signin.SignInViewModel
+import com.ch2ps385.nutrimate.presentation.screen.user.detailmenu.MenuDetailScreen
+import com.ch2ps385.nutrimate.presentation.screen.user.home.HomeScreen
+import com.ch2ps385.nutrimate.presentation.screen.user.menu.MenuScreen
 import com.ch2ps385.nutrimate.presentation.screen.user.preferences.UserPreferenceScreen
-import com.ch2ps385.nutrimate.ui.component.other.BottomBar
-import com.ch2ps385.nutrimate.ui.component.other.Toolbar
-import com.ch2ps385.nutrimate.ui.navigation.Screen
+import com.ch2ps385.nutrimate.presentation.ui.component.other.BottomBar
+import com.ch2ps385.nutrimate.presentation.ui.component.other.Toolbar
+import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 import com.google.android.gms.auth.api.identity.Identity
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.launch
 
 @Composable
@@ -50,10 +56,10 @@ fun NutriMateApp(
 
     Scaffold(
         topBar = {
-                 if(currentRoute != Screen.SignIn.route){
-                     Toolbar()
-                 }
-                 },
+            if (currentRoute != Screen.SignIn.route && currentRoute != Screen.Home.route && currentRoute != Screen.Menu.route ) {
+                Toolbar()
+            }
+        }    ,
         bottomBar = {
             if(currentRoute != Screen.UserPreferences.route && currentRoute != Screen.SignIn.route){
                 BottomBar(navController)
@@ -130,12 +136,40 @@ fun NutriMateApp(
                                 "Signed out",
                                 Toast.LENGTH_LONG
                             ).show()
-
                             navController.popBackStack()
                         }
-                    }
+                    },
+                    navController = navController
                 )
             }
+            composable(Screen.Home.route){
+                HomeScreen()
+                Log.d(TAG, "Berhasil pindah ke HOme Screen!")
+            }
+            composable(Screen.Menu.route){
+                MenuScreen(
+                    navigateToDetail = { foodId ->
+                        navController.navigate(Screen.MenuDetail.createRoute(foodId))
+                    }
+                )
+                Log.d(TAG, "Berhasil pindah ke Menu Screen!")
+            }
+            composable(
+                Screen.MenuDetail.route,
+                arguments = listOf(navArgument("foodId"){ type = NavType.LongType})
+            ){
+                val id = it.arguments?.getLong("foodId") ?: -1L
+                MenuDetailScreen(foodId = id) {
+                    
+                }
+            }
+
+            composable(
+                Screen.Profile.route
+            ){
+
+            }
+
 
         }
 

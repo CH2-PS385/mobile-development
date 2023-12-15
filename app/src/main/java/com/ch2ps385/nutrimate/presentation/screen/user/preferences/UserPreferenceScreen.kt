@@ -18,14 +18,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ch2ps385.nutrimate.data.UserData
+import androidx.navigation.NavController
+import com.ch2ps385.nutrimate.data.remote.UserData
 import coil.compose.AsyncImage
+import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 
 
 @Composable
 fun UserPreferenceScreen(
     userData: UserData?,
-    onSignOut: () -> Unit
+    onSignOut: () -> Unit = {},
+    navController: NavController // Added callback for navigation to home
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -54,6 +57,13 @@ fun UserPreferenceScreen(
         }
         Button(onClick = onSignOut) {
             Text(text = "Sign out")
+        }
+        Button(
+            onClick = {
+                navController.navigate(Screen.Home.route)
+            }
+        ) {
+            Text(text = " Next")
         }
     }
 }

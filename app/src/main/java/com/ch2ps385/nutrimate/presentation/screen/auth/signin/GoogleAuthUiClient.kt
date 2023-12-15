@@ -1,10 +1,12 @@
 package com.ch2ps385.nutrimate.presentation.screen.auth.signin
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import com.ch2ps385.nutrimate.data.SignInResult
-import com.ch2ps385.nutrimate.data.UserData
+import android.util.Log
+import com.ch2ps385.nutrimate.data.remote.SignInResult
+import com.ch2ps385.nutrimate.data.remote.UserData
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -36,6 +38,7 @@ class GoogleAuthUiClient(
     suspend fun signInWithIntent(intent: Intent) : SignInResult {
         val credential = oneTapClient.getSignInCredentialFromIntent(intent)
         val googleIdToken = credential.googleIdToken
+        Log.d(TAG, "GoogleToken :$googleIdToken")
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
         return try{
             val user = auth.signInWithCredential(googleCredentials).await().user

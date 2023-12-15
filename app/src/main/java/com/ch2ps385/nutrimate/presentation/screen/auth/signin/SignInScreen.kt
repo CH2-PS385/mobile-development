@@ -1,7 +1,5 @@
 package com.ch2ps385.nutrimate.presentation.screen.auth.signin
 
-import android.app.Activity
-import androidx.activity.result.IntentSenderRequest
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -25,8 +23,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,13 +37,12 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ch2ps385.nutrimate.R
-import com.ch2ps385.nutrimate.ui.theme.NutriMateTheme
-import com.ch2ps385.nutrimate.ui.theme.Shapes
-import com.ch2ps385.nutrimate.ui.theme.neutralColor1
-import com.ch2ps385.nutrimate.ui.theme.pSinopia
-import com.ch2ps385.nutrimate.ui.theme.pSmashedPumpkin
-import com.ch2ps385.nutrimate.ui.theme.solidWhite
-import kotlinx.coroutines.launch
+import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
+import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
+import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
+import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
+import com.ch2ps385.nutrimate.presentation.ui.theme.pSmashedPumpkin
+import com.ch2ps385.nutrimate.presentation.ui.theme.solidWhite
 
 @Composable
 fun SignInScreen(
