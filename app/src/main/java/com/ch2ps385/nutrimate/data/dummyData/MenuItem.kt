@@ -11,5 +11,5 @@ data class Menu(
 )
 
 val dummyMenu = listOf(
-    Menu(R.drawable.menu1, "Tiramisu Coffee Milk", "225 cal", "Real food", "Baked"),
+    Menu(R.drawable.menu1, "Tiramisu Coffee Milk", "225", "Real food", "Baked"),
 )

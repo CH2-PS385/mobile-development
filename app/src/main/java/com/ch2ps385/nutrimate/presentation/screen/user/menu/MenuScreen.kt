@@ -2,6 +2,10 @@ package com.ch2ps385.nutrimate.presentation.screen.user.menu
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,12 +14,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,6 +52,8 @@ import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor4
 import com.ch2ps385.nutrimate.R
+import com.ch2ps385.nutrimate.presentation.ui.component.other.CircularProgressAnimated
+import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
 
 
 @Composable
@@ -81,6 +90,10 @@ fun MenuScreen(
         }
         viewModel.state.collectAsState(initial = Resource.Loading()).value.let { state ->
             when(state){
+                is Resource.Loading -> {
+//                    CustomLinearProgressBar()
+                    CircularProgressAnimated()
+                }
                 is Resource.Success -> {
                     state.data?.let {
                         state.data?.let { MenuContent(menuList = it, navigateToDetail = navigateToDetail) }
@@ -140,3 +153,4 @@ fun MenuContent(
         }
     }
 }
+

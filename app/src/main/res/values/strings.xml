@@ -3,6 +3,8 @@
     <string name="search_hint">Cari apa?</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+
+    <string name="greeting_user">Hello, %s</string>
     <string name="calorries_menu">%s kalori</string>
 
     <string name="not_found">No results found</string>
@@ -30,4 +32,13 @@
     <string name="change_preferences">Change Preferences</string>
     <string name="about">About</string>
     <string name="sign_out">Sign Out</string>
+
+<!--    About Screen -->
+    <string name="nutrimate">NutriMate</string>
+    <string name="nutrimate_desc">Calories Prediction and Food Planner</string>
+    <string name="version">Version 1.0.0.0</string>
+    <string name="copyright">©2023 | CH2-PS385</string>
+    
+    <string name="toolbar_detail_menu">Detail Menu</string>
+    <string name="toolbar_edit_preferences">Edit User Preferences</string>
 </resources>

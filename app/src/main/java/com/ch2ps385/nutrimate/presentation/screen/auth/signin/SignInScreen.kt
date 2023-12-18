@@ -46,7 +46,7 @@ import com.ch2ps385.nutrimate.presentation.ui.theme.solidWhite
 
 @Composable
 fun SignInScreen(
-    state : SignInState,
+//    state : SignInState,
     onSignInClick : () -> Unit = {},
     modifier: Modifier = Modifier,
 ){
@@ -239,7 +239,7 @@ fun SignInScreen(
 )
 fun LoginScreenPreview(){
     NutriMateTheme {
-//        SignInScreen()
+        SignInScreen()
     }
 }
 

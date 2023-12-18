@@ -113,5 +113,13 @@ dependencies {
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("io.coil-kt:coil:1.3.2")
 
+    implementation ("com.google.accompanist:accompanist-drawablepainter:0.25.1")
+
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.preference:preference-ktx:1.2.1")
+
+    // Calendar Dialog
+    implementation ("com.maxkeppeler.sheets-compose-dialogs:core:1.2.0")
+    implementation ("com.maxkeppeler.sheets-compose-dialogs:calendar:1.2.0")
 
 }

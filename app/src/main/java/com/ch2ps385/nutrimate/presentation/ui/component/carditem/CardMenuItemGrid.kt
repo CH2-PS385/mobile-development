@@ -1,5 +1,9 @@
 package com.ch2ps385.nutrimate.presentation.ui.component.carditem
 
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,13 +23,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -55,15 +62,16 @@ fun CardMenuItemGrid(
 ){
 
     Card(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 10.dp
-        ),
+//        elevation = CardDefaults.cardElevation(
+//            defaultElevation = 10.dp
+//        ),
         modifier = modifier
+            .shadow(elevation = 3.dp,shape = Shapes.small, spotColor = pSmashedPumpkin, ambientColor = pSmashedPumpkin)
             .clip(Shapes.extraSmall)
             .height(230.dp)
             .width(175.dp)
-            .clip(Shapes.small)
-            .shadow(elevation = 20.dp, shape = Shapes.small)
+//            .shadow(elevation = 20.dp, shape = Shapes.small)
+            .background(color = sBabyPink)
             .border(BorderStroke(1.dp, color = sBabyPink), Shapes.extraSmall)
     ) {
         Column(
@@ -74,19 +82,13 @@ fun CardMenuItemGrid(
                 .background(color = solidWhite)
                 .padding(5.dp)
         ) {
-//            val painter = rememberImagePainter(data = menu.imageUrl, builder = {
-//                crossfade(true)
-//            })
-//            Image(
-//                painter = painter,
-//                contentDescription = null,
-//                modifier = modifier
-//                    .fillMaxWidth()
-//                    .height(120.dp),
-//                contentScale = ContentScale.Crop
-//            )
             Image(
-                painter = rememberAsyncImagePainter(model = menu.imgUrl),
+                painter = rememberAsyncImagePainter(
+                    model = menu.imgUrl,
+//                        onLoading = {
+//                            CircularProgressAnimated()
+//                        }
+                    ),
                 contentDescription = "image description",
                 contentScale = ContentScale.FillBounds,
                 modifier = modifier
@@ -115,28 +117,7 @@ fun CardMenuItemGrid(
                             .padding(vertical = 4.dp, horizontal = 4.dp)
                     )
                 }
-//
-//                Box(
-//                    modifier = modifier
-//                        .widthIn(50.dp)
-//                        .clip(Shapes.extraSmall)
-//                        .background(color = pSmashedPumpkin)
-//                        .padding(
-//                            horizontal = 8.dp,
-//                            vertical = 2.dp,
-//                        )
-//                ) {
-//                    Text(
-//                        text = stringResource(R.string.calorries_menu, menu.kalori),
-//                        style = TextStyle(
-//                            color = solidWhite,
-//                            fontSize = 10.sp,
-//                            lineHeight = 12.sp,
-//                            fontFamily = FontFamily(Font(R.font.inter_regular)),
-//                            fontWeight = FontWeight(700),
-//                        )
-//                    )
-//                }
+
             }
             Row(
                 modifier = modifier
@@ -214,54 +195,27 @@ fun CardMenuItemGrid(
                     )
                 }
             }
-
-//            Row(
-//                modifier = modifier
-//                    .heightIn(40.dp)
-//                    .fillMaxWidth(),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.spacedBy(6.dp)
-//            ){
-//                Box(
-//                    modifier = modifier
-//                        .clip(Shapes.extraSmall)
-//                        .background(color = neutralColor5)
-//                        .padding(
-//                            horizontal = 8.dp,
-//                            vertical = 2.dp,
-//                        )
-//                ){
-//                    Text(
-//                        text = menu.tipe,
-//                        style = TextStyle(
-//                            fontSize = 10.sp,
-//                            lineHeight = 12.sp,
-//                            fontFamily = FontFamily(Font(R.font.inter_regular)),
-//                            fontWeight = FontWeight(700),
-//                        )
-//                    )
-//                }
-//                Box(
-//                    modifier = modifier
-//                        .clip(Shapes.extraSmall)
-//                        .background(color = neutralColor5)
-//                        .padding(
-//                            horizontal = 8.dp,
-//                            vertical = 2.dp,
-//                        )
-//                ){
-//                    Text(
-//                        text = menu.jenisOlahan,
-//                        style = TextStyle(
-//                            fontSize = 10.sp,
-//                            lineHeight = 12.sp,
-//                            fontFamily = FontFamily(Font(R.font.inter_regular)),
-//                            fontWeight = FontWeight(700),
-//                        )
-//                    )
-//                }
-//            }
         }
+    }
+}
+
+@Composable
+private fun CircularProgressAnimated(){
+    val progressValue = 0.75f
+    val infiniteTransition = rememberInfiniteTransition()
+
+    val progressAnimationValue by infiniteTransition.animateFloat(
+        initialValue = 0.0f,
+        targetValue = progressValue,animationSpec = infiniteRepeatable(animation = tween(900))
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp), // Adjust the padding as needed
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(progress = progressAnimationValue)
     }
 }
 
