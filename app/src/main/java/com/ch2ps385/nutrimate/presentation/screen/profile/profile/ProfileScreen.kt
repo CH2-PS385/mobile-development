@@ -1,5 +1,6 @@
 package com.ch2ps385.nutrimate.presentation.screen.profile.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,27 +17,47 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.ch2ps385.nutrimate.R
+import com.ch2ps385.nutrimate.data.remote.UserData
+import com.ch2ps385.nutrimate.presentation.screen.auth.signin.GoogleAuthUiClient
 import com.ch2ps385.nutrimate.presentation.screen.user.detailmenu.VerticalDivider
 import com.ch2ps385.nutrimate.presentation.ui.component.other.ProfileOption
+import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
+import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor3
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor4
+import com.google.android.gms.auth.api.identity.Identity
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
+    userData: UserData?,
+    navController: NavController,
     modifier: Modifier = Modifier,
 ){
+    val coroutineScope = rememberCoroutineScope()
+    val applicationContext = LocalContext.current
+    val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            context = applicationContext,
+            oneTapClient = Identity.getSignInClient(applicationContext)
+        )
+    }
+
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,26 +72,27 @@ fun ProfileScreen(
             modifier = modifier
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Image(
-            painter = painterResource(id = R.drawable.menu1),
-            contentDescription = "test",
-            contentScale = ContentScale.FillBounds,
+        AsyncImage(
+            model = userData?.profilePictureUrl,
+            contentDescription = "Profile picture",
             modifier = Modifier
                 .size(150.dp)
                 .clip(CircleShape),
+            contentScale = ContentScale.Crop
         )
-        //        AsyncImage(
-//            model = userData.profilePictureUrl,
-//            contentDescription = "Profile picture",
-//            modifier = Modifier
-//                .size(150.dp)
-//                .clip(CircleShape),
-//            contentScale = ContentScale.Crop
-//        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = stringResource(id = R.string.name),
+//            text = stringResource(id = R.string.name),
+            text = userData?.username ?: stringResource(id = R.string.name),
             style = MaterialTheme.typography.headlineSmall,
+            modifier = modifier
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+//            text = stringResource(id = R.string.name),
+            text = userData?.email ?: stringResource(id = R.string.name),
+            style = MaterialTheme.typography.labelMedium,
+            color = neutralColor3,
             modifier = modifier
         )
         Spacer(modifier = Modifier.height(24.dp))
@@ -150,28 +172,44 @@ fun ProfileScreen(
         Column(
 
         ){
-            ProfileOption(
-                icon = painterResource(id = R.drawable.baseline_person_24),
-                text = stringResource(id = R.string.personal_data),
-                onClick = {}
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+//            ProfileOption(
+//                icon = painterResource(id = R.drawable.baseline_person_24),
+//                text = stringResource(id = R.string.personal_data),
+//                onClick = {
+//                    navController.navigate(Screen.ProfileDetail.route)
+//                }
+//            )
+//            Spacer(modifier = Modifier.height(16.dp))
             ProfileOption(
                 icon = painterResource(id = R.drawable.baseline_settings_24),
                 text = stringResource(id = R.string.change_preferences),
-                onClick = {}
+                onClick = {
+                    navController.navigate(Screen.ProfileDetail.route)
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
             ProfileOption(
                 icon = painterResource(id = R.drawable.baseline_info_24),
                 text = stringResource(id = R.string.about),
-                onClick = {}
+                onClick = {
+                    navController.navigate(Screen.About.route)
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
             ProfileOption(
                 icon = painterResource(id = R.drawable.baseline_logout_24),
                 text = stringResource(id = R.string.sign_out),
-                onClick = {}
+                onClick = {
+                        coroutineScope.launch {
+                            googleAuthUiClient.signOut()
+                            Toast.makeText(
+                                applicationContext,
+                                "Signed out",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            navController.popBackStack()
+                        }
+                }
             )
 
         }
@@ -182,6 +220,13 @@ fun ProfileScreen(
 @Preview(device = Devices.PIXEL_4, showBackground = true)
 fun ProfileScreenPreview() {
     NutriMateTheme {
-        ProfileScreen()
+//        ProfileScreen(
+//            userData = UserData(
+//                userId = "123",
+//                username = "John Doe",
+//                profilePictureUrl = ""
+//                // Anda bisa menambahkan properti lain sesuai kebutuhan
+//            )
+//        )
     }
 }

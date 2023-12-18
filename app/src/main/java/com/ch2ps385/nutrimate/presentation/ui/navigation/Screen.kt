@@ -14,6 +14,10 @@ sealed class Screen(val route: String){
         fun createRoute(foodId : Long) = "menu/$foodId"
     }
 
+    object About : Screen("about")
+
+    object ProfileDetail:Screen("profileDetail")
+
 
 
 

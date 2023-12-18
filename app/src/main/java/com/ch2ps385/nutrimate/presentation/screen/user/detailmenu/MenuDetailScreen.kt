@@ -2,6 +2,10 @@ package com.ch2ps385.nutrimate.presentation.screen.user.detailmenu
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -64,6 +69,7 @@ fun MenuDetailScreen(
     viewModel.state.collectAsState(initial = Resource.Loading()).value.let { state ->
         when(state){
             is Resource.Loading ->{
+                CircularProgressAnimated()
                 viewModel.getMenuById(foodId.toString())
             }
             is Resource.Success -> {
@@ -332,6 +338,25 @@ fun VerticalDivider(
             .height(36.dp)
             .background(color = neutralColor4)
     )
+}
+
+@Composable
+private fun CircularProgressAnimated(){
+    val progressValue = 0.75f
+    val infiniteTransition = rememberInfiniteTransition()
+
+    val progressAnimationValue by infiniteTransition.animateFloat(
+        initialValue = 0.0f,
+        targetValue = progressValue,animationSpec = infiniteRepeatable(animation = tween(900)))
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp), // Adjust the padding as needed
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(progress = progressAnimationValue)
+    }
 }
 
 

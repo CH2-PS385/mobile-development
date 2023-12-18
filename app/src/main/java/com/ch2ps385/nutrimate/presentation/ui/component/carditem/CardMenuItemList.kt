@@ -1,7 +1,9 @@
 package com.ch2ps385.nutrimate.presentation.ui.component.carditem
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +26,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -29,25 +34,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.ch2ps385.nutrimate.R
 import com.ch2ps385.nutrimate.data.dummyData.Menu
+import com.ch2ps385.nutrimate.data.remote.responses.DataItem
+import com.ch2ps385.nutrimate.data.remote.responses.DataRecommendation
 import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor5
+import com.ch2ps385.nutrimate.presentation.ui.theme.pSmashedPumpkin
+import com.ch2ps385.nutrimate.presentation.ui.theme.sBabyPink
 import com.ch2ps385.nutrimate.presentation.ui.theme.solidWhite
 
 @Composable
 fun CardMenuItemList(
-    menu : Menu,
-    modifier : Modifier = Modifier,
+    menu: DataRecommendation,
+    modifier: Modifier = Modifier
 ){
     Card(
+        colors = CardDefaults.cardColors(
+            containerColor = solidWhite
+        ),
         modifier = modifier
+            .shadow(elevation = 3.dp,shape = Shapes.small, spotColor = pSmashedPumpkin, ambientColor = pSmashedPumpkin)
             .clip(Shapes.extraSmall)
-            .shadow(elevation = 2.dp, spotColor = Color(0x40F1805E), ambientColor = Color(0x40F1805E))
-            .background(color = neutralColor1)
-            .width(354.dp)
+            .border(BorderStroke(1.dp, color = sBabyPink), Shapes.extraSmall)
+            .widthIn(360.dp)
             .height(64.dp)
     ){
         Row(
@@ -56,7 +69,12 @@ fun CardMenuItemList(
             verticalAlignment = Alignment.CenterVertically,
         ){
             Image(
-                painter = painterResource(id = R.drawable.menu1),
+                painter = rememberAsyncImagePainter(
+                    model = menu.imageUrl,
+//                        onLoading = {
+//                            CircularProgressAnimated()
+//                        }
+                ),
                 contentDescription = "image description",
                 contentScale = ContentScale.FillBounds,
                 modifier = modifier
@@ -75,7 +93,7 @@ fun CardMenuItemList(
                     .padding(5.dp)
             ) {
                 Text(
-                    text = menu.title,
+                    text = menu.namaMakananClean,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -90,17 +108,19 @@ fun CardMenuItemList(
                 ){
                     Box(
                         modifier = modifier
+                            .widthIn(50.dp)
                             .clip(Shapes.extraSmall)
-                            .background(color = neutralColor5)
+                            .background(color = pSmashedPumpkin)
                             .padding(
                                 horizontal = 8.dp,
                                 vertical = 2.dp,
                             )
-                    ){
+                    ) {
                         Text(
-                            text = menu.calories,
+                            text = stringResource(R.string.calorries_menu, menu.kalori),
                             style = TextStyle(
-                                fontSize = 6.sp,
+                                color = solidWhite,
+                                fontSize = 8.sp,
                                 lineHeight = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_regular)),
                                 fontWeight = FontWeight(700),
@@ -117,9 +137,9 @@ fun CardMenuItemList(
                             )
                     ){
                         Text(
-                            text = menu.foodType,
+                            text = menu.tipe,
                             style = TextStyle(
-                                fontSize = 6.sp,
+                                fontSize = 8.sp,
                                 lineHeight = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_regular)),
                                 fontWeight = FontWeight(700),
@@ -136,9 +156,9 @@ fun CardMenuItemList(
                             )
                     ){
                         Text(
-                            text = menu.foodMEthod,
+                            text = menu.jenisOlahan,
                             style = TextStyle(
-                                fontSize = 6.sp,
+                                fontSize = 8.sp,
                                 lineHeight = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.inter_regular)),
                                 fontWeight = FontWeight(700),
@@ -153,12 +173,12 @@ fun CardMenuItemList(
 
 }
 
-@Composable
-@Preview(showBackground = true)
-fun CardMenuItemListPreview(){
-    NutriMateTheme{
-        CardMenuItemList(
-            menu = Menu(R.drawable.menu1,"Rendang", "225 cal", "Real food", "Baked"),
-        )
-    }
-}
+//@Composable
+//@Preview(showBackground = true)
+//fun CardMenuItemListPreview(){
+//    NutriMateTheme{
+//        CardMenuItemList(
+//            menu = Menu(R.drawable.menu1,"Rendang", "225 cal", "Real food", "Baked"),
+//        )
+//    }
+//}

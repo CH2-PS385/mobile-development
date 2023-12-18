@@ -2,6 +2,7 @@ package com.ch2ps385.nutrimate.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -27,12 +28,13 @@ private val LightColorScheme = lightColorScheme(
 
     secondary = pSinopia,
     onSecondary = solidWhite,
+    secondaryContainer = sUnbleachedSilk ,
 
     tertiary = pNaplesYellow,
     onTertiary = solidWhite,
 
     surface = solidWhite,
-    onSurface = neutralColor6,
+    onSurface = neutralColor1,
 
     background = solidWhite,
 
@@ -57,15 +59,19 @@ fun NutriMateTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+//    val colorScheme = when {
+//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//            val context = LocalContext.current
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//        }
+//
+//        darkTheme -> DarkColorScheme
+//        else -> LightColorScheme
+//    }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+
+    // Disabled dynamic colors for android S or greater
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
