@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
 
 @Composable
-private fun CustomLinearProgressBar(){
+fun CustomLinearProgressBar(){
     Column(modifier = Modifier.fillMaxWidth()) {
         LinearProgressIndicator(
             modifier = Modifier

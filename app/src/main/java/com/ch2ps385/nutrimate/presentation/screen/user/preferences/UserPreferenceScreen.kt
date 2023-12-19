@@ -1,8 +1,7 @@
 package com.ch2ps385.nutrimate.presentation.screen.user.preferences
 
-import androidx.compose.foundation.BorderStroke
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,32 +13,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -51,26 +38,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.ch2ps385.nutrimate.R
 import com.ch2ps385.nutrimate.common.Constants
 import com.ch2ps385.nutrimate.common.Constants.foodItems
+import com.ch2ps385.nutrimate.common.Resource
 import com.ch2ps385.nutrimate.data.remote.UserData
-import com.ch2ps385.nutrimate.data.remote.model.AddUserByEmail
+import com.ch2ps385.nutrimate.data.remote.model.AddAllergies
+import com.ch2ps385.nutrimate.data.remote.model.AddUserPreferences
 import com.ch2ps385.nutrimate.di.Injection
 import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
-import com.ch2ps385.nutrimate.presentation.screen.user.menu.MenuViewModel
 import com.ch2ps385.nutrimate.presentation.ui.component.button.CustomCheckBoxButton
 import com.ch2ps385.nutrimate.presentation.ui.component.button.GenderButtonPackage
 import com.ch2ps385.nutrimate.presentation.ui.component.textfields.TextFieldsPreferences
 import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
-import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
-import com.ch2ps385.nutrimate.presentation.ui.theme.pSmashedPumpkin
-import com.ch2ps385.nutrimate.presentation.ui.theme.solidWhite
+import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
+import com.maxkeppeler.sheets.state.StateDialog
+import com.maxkeppeler.sheets.state.models.State
+import com.maxkeppeler.sheets.state.models.StateConfig
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserPreferenceScreen(
     userData : UserData?,
@@ -80,7 +69,6 @@ fun UserPreferenceScreen(
     ),
     modifier : Modifier = Modifier,
 ){
-
 //    if (userData!= null){
 //        viewModel.addUserByEmail(
 //            AddUserByEmail(
@@ -89,6 +77,39 @@ fun UserPreferenceScreen(
 //            )
 //        )
 //    }
+
+    val sucessAddState = rememberUseCaseState()
+    val successConfigState = State.Success(labelText = "Data Preferences has been saved!")
+    StateDialog(
+        state = sucessAddState,
+        config = StateConfig(state = successConfigState),
+    )
+
+    val failedAddState = rememberUseCaseState()
+    val  failedConfigState = State.Failure(labelText = "Data preferences hasn't been save!")
+
+    StateDialog(
+        state = failedAddState,
+        config = StateConfig(state = failedConfigState),
+    )
+
+
+    viewModel.stateUserPreferences.collectAsState().value.let { state ->
+        when(state){
+            is Resource.Loading ->{
+//                CircularProgressAnimated()
+            }
+            is Resource.Success -> {
+                sucessAddState.show()
+                navController.navigate(Screen.Home.route)
+                Log.d("TAG", "Berhasil disubmit save preferencesnya!")
+            }
+            is Resource.Error -> {
+                failedAddState.show()
+            }
+            else->{}
+        }
+    }
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -207,6 +228,7 @@ fun UserPreferenceScreen(
                         onCheckedChange = { newChecked ->
                             viewModel.setFoodPreference(index, newChecked)
                         },
+                        index = index
                     )
                 }
             }
@@ -214,20 +236,40 @@ fun UserPreferenceScreen(
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-                    navController.navigate(Screen.Home.route)
-                        if (userData!= null){
-                            viewModel.addUserByEmail(
-                                AddUserByEmail(
-                                    email = userData.email!!, // Provide a default value if email is null
-                                    name = userData.username!!
-                                )
-                            )
-                        }
-                      },
+                val height = viewModel.height.value
+                val weight = viewModel.weight.value
+                val age = viewModel.age.value
+                val gender = if (viewModel.gender.value == Constants.Gender.Male) "m" else "f"
+                val allergies = foodItems.filterIndexed { index, _ ->
+                    viewModel.foodPreferences.value[index]
+                }
+
+
+                Log.d("UserPreferenceScreen", "Height: $height, Weight: $weight, Age: $age, Gender: $gender, Allergies: $allergies")
+                // Use the collected data as needed, for example, pass it to your ViewModel function
+                viewModel.addUserPreferences(
+                    AddUserPreferences(
+                        email = userData?.email!!,
+                        height = height.toInt(),
+                        weight = weight.toInt(),
+                        age = age.toInt(),
+                        gender = gender,
+                    )
+                )
+                viewModel.addAllergies(
+                    AddAllergies(
+                        email = userData?.email!!,
+                        allergies = allergies
+                    )
+                )
+
+
+            },
             colors = ButtonDefaults.buttonColors(containerColor = pSinopia),
             modifier = modifier
                 .width(312.dp)
-                .height(40.dp)
+                .height(40.dp),
+
         ) {
             Image(
                 painterResource(id = R.drawable.ic_save),
@@ -243,91 +285,3 @@ fun UserPreferenceScreen(
     }
 }
 
-
-//        Column(
-//            verticalArrangement = Arrangement.Top,
-//            horizontalAlignment = Alignment.Start,
-//            modifier = modifier
-//                .padding(horizontal = 29.dp)
-//                .fillMaxWidth()
-//        ) {
-//            Text(
-//                text = "Gender",
-//                style = MaterialTheme.typography.titleMedium,
-//                color = neutralColor1,
-//            )
-//            Spacer(modifier = Modifier.height(8.dp))
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//                    .border(width = 1.dp, color = pSmashedPumpkin, shape = Shapes.large)
-//            ) {
-//                RadioButton(
-//                    selected = viewModel.gender.value == Gender.Male,
-//                    onClick = {
-//                        viewModel.setGender(Gender.Male)
-//                    },
-//                    colors = RadioButtonDefaults.colors(
-//                        selectedColor = pSmashedPumpkin
-//                    )
-//                )
-//                Text(
-//                    text = "Laki-Laki",
-//                    color = neutralColor1,
-//                    style = MaterialTheme.typography.labelMedium
-//                )
-//            }
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//                    .border(width = 1.dp, color = pSmashedPumpkin, shape = Shapes.large)
-//            ) {
-//                RadioButton(
-//                    selected = viewModel.gender.value == Gender.Female,
-//                    onClick = {
-//                        viewModel.setGender(Gender.Female)
-//                    },
-//                )
-//                Text(
-//                    text = "Perempuan",
-//                    color = neutralColor1,
-//                    style = MaterialTheme.typography.labelMedium
-//                )
-//            }
-//        }
-
-
-
-//foodItems.forEachIndexed { index, foodItem ->
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically,
-//        modifier = Modifier
-//            .padding(8.dp)
-//            .fillMaxWidth()
-//            .border(width = 1.dp, color = pSmashedPumpkin, shape = Shapes.large)
-//    ) {
-//        Checkbox(
-//            checked = viewModel.foodPreferences.value[index],
-//            onCheckedChange = { newChecked ->
-//                viewModel.setFoodPreference(index, newChecked)
-//            },
-//            colors = CheckboxDefaults.colors(
-//                checkmarkColor = solidWhite,
-//                checkedColor = pSmashedPumpkin
-//            ),
-//            modifier = modifier
-//                .clip(shape = RoundedCornerShape(100))
-//        )
-//        Text(
-//            text = foodItem,
-//            color = neutralColor1,
-//            style = MaterialTheme.typography.labelMedium,
-//            modifier = Modifier.padding(start = 8.dp)
-//        )
-//    }
-//}
-//}

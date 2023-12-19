@@ -23,25 +23,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.ch2ps385.nutrimate.R
-import com.ch2ps385.nutrimate.data.dummyData.Menu
-import com.ch2ps385.nutrimate.data.remote.responses.DataItem
-import com.ch2ps385.nutrimate.data.remote.responses.DataRecommendation
-import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
+import com.ch2ps385.nutrimate.data.remote.responses.GetDataMealPlanner
+import com.ch2ps385.nutrimate.data.remote.responses.GetMealPlannerResponse
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
-import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor5
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSmashedPumpkin
 import com.ch2ps385.nutrimate.presentation.ui.theme.sBabyPink
@@ -49,7 +43,7 @@ import com.ch2ps385.nutrimate.presentation.ui.theme.solidWhite
 
 @Composable
 fun CardMenuItemList(
-    menu: DataRecommendation,
+    planner: GetDataMealPlanner,
     modifier: Modifier = Modifier
 ){
     Card(
@@ -70,7 +64,7 @@ fun CardMenuItemList(
         ){
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = menu.imageUrl,
+                    model = planner.imageUrl
 //                        onLoading = {
 //                            CircularProgressAnimated()
 //                        }
@@ -93,7 +87,7 @@ fun CardMenuItemList(
                     .padding(5.dp)
             ) {
                 Text(
-                    text = menu.namaMakananClean,
+                    text = planner.namaMakananClean,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -117,7 +111,7 @@ fun CardMenuItemList(
                             )
                     ) {
                         Text(
-                            text = stringResource(R.string.calorries_menu, menu.kalori),
+                            text = stringResource(R.string.calorries_menu, planner.kalori),
                             style = TextStyle(
                                 color = solidWhite,
                                 fontSize = 8.sp,
@@ -137,7 +131,7 @@ fun CardMenuItemList(
                             )
                     ){
                         Text(
-                            text = menu.tipe,
+                            text = planner.tipe,
                             style = TextStyle(
                                 fontSize = 8.sp,
                                 lineHeight = 12.sp,
@@ -156,7 +150,7 @@ fun CardMenuItemList(
                             )
                     ){
                         Text(
-                            text = menu.jenisOlahan,
+                            text = planner.jenisOlahan,
                             style = TextStyle(
                                 fontSize = 8.sp,
                                 lineHeight = 12.sp,

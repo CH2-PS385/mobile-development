@@ -21,6 +21,8 @@ object Constants {
         "Umbi-umbian"
     )
 
+    val foodCategories = listOf("Breakfast", "Lunch", "Dinner", "Snack")
+
     enum class Gender {
         Male,
         Female
