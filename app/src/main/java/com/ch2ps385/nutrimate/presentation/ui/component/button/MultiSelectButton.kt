@@ -1,6 +1,7 @@
 package com.ch2ps385.nutrimate.presentation.ui.component.button
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -58,17 +59,20 @@ fun CustomCheckBoxButton(
     text: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    index: Int // Added index parameter
 ) {
-    var isClicked by remember { mutableStateOf(!checked) }
+    var isClicked by remember { mutableStateOf(checked) }
 
     Button(
         onClick = {
             isClicked = !isClicked
             onCheckedChange(isClicked)
+
+            Log.d("CustomCheckBoxButton", "Clicked on item at index $index with text: $text")
         },
         colors = ButtonDefaults.buttonColors(
-            contentColor = if (isClicked) pSmashedPumpkin else solidWhite,
-            containerColor = if (isClicked) solidWhite else pSmashedPumpkin
+            contentColor = if (isClicked) solidWhite else pSmashedPumpkin,
+            containerColor = if (isClicked) pSmashedPumpkin else solidWhite,
         ),
         border = BorderStroke(
             width = 1.dp,
@@ -85,7 +89,7 @@ fun CustomCheckBoxButton(
         ) {
             Text(
                 text = text,
-                color = if (isClicked) neutralColor1 else solidWhite,
+                color = if (isClicked) solidWhite else neutralColor1,
                 style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center
             )
@@ -101,6 +105,7 @@ fun CustomCheckBoxButtonPreview() {
             text = "Sample Text",
             checked = true,
             onCheckedChange = { /* Handle checked change */ },
+            index = 1
         )
     }
 }

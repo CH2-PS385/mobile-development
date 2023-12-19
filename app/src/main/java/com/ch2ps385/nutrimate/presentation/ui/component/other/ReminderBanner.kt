@@ -2,6 +2,7 @@ package com.ch2ps385.nutrimate.presentation.ui.component.other
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.ch2ps385.nutrimate.R
+import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
@@ -40,6 +44,7 @@ import com.google.android.play.integrity.internal.y
 
 @Composable
 fun ReminderBanner(
+    navController: NavController,
     modifier : Modifier = Modifier
 ){
     Box(
@@ -113,6 +118,6 @@ fun ReminderBanner(
 @Preview(showBackground = true)
 fun ReminderBannerPreview(){
     NutriMateTheme {
-        ReminderBanner()
+        ReminderBanner(navController = rememberNavController())
     }
 }

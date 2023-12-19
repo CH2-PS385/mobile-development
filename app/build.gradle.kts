@@ -121,5 +121,6 @@ dependencies {
     // Calendar Dialog
     implementation ("com.maxkeppeler.sheets-compose-dialogs:core:1.2.0")
     implementation ("com.maxkeppeler.sheets-compose-dialogs:calendar:1.2.0")
+    implementation ("com.maxkeppeler.sheets-compose-dialogs:state:1.2.0")
 
 }

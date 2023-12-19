@@ -7,6 +7,14 @@
     <string name="greeting_user">Hello, %s</string>
     <string name="calorries_menu">%s kalori</string>
 
+    <string name="recommend_card_protein">%sg protein</string>
+    <string name="recommend_card_calorries">%s callories</string>
+    <string name="recommend_card_fat">%sg fat</string>
+    <string name="reccomend_card_carbs">%sg carbs</string>
+
+    <string name="recommend_calorries_banner">%d callories</string>
+    <string name="recommend_subcontent_banner">%dg Protein | %dg Fat | %dg Carbs</string>
+
     <string name="not_found">No results found</string>
 
     <string name="nutrition_facts">Nutritions Facts</string>
@@ -17,6 +25,8 @@
     <string name="carbs">Carbs</string>
     <string name="fast_food">Fast Food</string>
     <string name="healthy_food">Healthy Food</string>
+
+   <string name="waterIntakeSum">%s ml</string>
 
     <string name="profile">Profile</string>
     <string name="name">Daniel Christianto</string>

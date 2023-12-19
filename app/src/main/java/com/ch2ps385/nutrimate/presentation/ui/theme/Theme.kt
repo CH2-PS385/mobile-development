@@ -71,7 +71,7 @@ fun NutriMateTheme(
 
 
     // Disabled dynamic colors for android S or greater
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = LightColorScheme
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

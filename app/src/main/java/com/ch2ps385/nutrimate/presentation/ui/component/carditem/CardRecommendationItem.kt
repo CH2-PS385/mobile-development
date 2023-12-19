@@ -1,5 +1,7 @@
 package com.ch2ps385.nutrimate.presentation.ui.component.carditem
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.DrawCacheModifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
@@ -35,8 +35,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.ch2ps385.nutrimate.R
+import com.ch2ps385.nutrimate.common.Constants
+import com.ch2ps385.nutrimate.data.remote.responses.GetDataMealPlanner
+import com.ch2ps385.nutrimate.data.remote.responses.PostDataMealPlanner
 import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
@@ -47,14 +50,21 @@ import com.ch2ps385.nutrimate.presentation.ui.theme.solidWhite
 
 @Composable
 fun CardRecommendationItem(
+    planner: PostDataMealPlanner,
     modifier: Modifier = Modifier
 ){
+    Log.d(TAG, "Indeks: ${planner.toString()} && {$planner}" )
     Card(
         modifier = modifier
-            .shadow(elevation = 3.dp,shape = Shapes.small, spotColor = pSmashedPumpkin, ambientColor = pSmashedPumpkin)
+            .shadow(
+                elevation = 3.dp,
+                shape = Shapes.small,
+                spotColor = pSmashedPumpkin,
+                ambientColor = pSmashedPumpkin
+            )
             .clip(Shapes.extraSmall)
             .fillMaxWidth()
-            .height(120.dp)
+            .height(128.dp)
             .border(BorderStroke(1.dp, color = sBabyPink), Shapes.extraSmall),
         colors = CardDefaults.cardColors(
             containerColor = solidWhite
@@ -104,7 +114,7 @@ fun CardRecommendationItem(
                         )
                 ){
                     Text(
-                        text = "22 Kalori",
+                        text = stringResource(id = R.string.recommend_card_calorries, planner.kalori),
                         style = TextStyle(
                             color = solidWhite,
                             fontSize = 10.sp,
@@ -123,7 +133,12 @@ fun CardRecommendationItem(
                     .padding(end = 8.dp)
             ){
                 Image(
-                    painter = painterResource(id = R.drawable.menu1),
+                    painter = rememberAsyncImagePainter(
+                        model = planner.imageUrl,
+//                        onLoading = {
+//                            CircularProgressAnimated()
+//                        }
+                    ),
                     contentDescription = "image description",
                     contentScale = ContentScale.FillBounds,
                     modifier = modifier
@@ -133,7 +148,7 @@ fun CardRecommendationItem(
                         .clip(Shapes.extraSmall)
                 )
                 Text(
-                    text = "Ayam Goreng Kalasan",
+                    text = planner.namaMakananClean,
                     style = MaterialTheme.typography.titleMedium,
                     color = neutralColor1,
                     modifier = Modifier
@@ -160,7 +175,7 @@ fun CardRecommendationItem(
                         )
                 ) {
                     Text(
-                        text = "154g Protein",
+                        text = stringResource(id = R.string.protein, planner.protein),
                         style = TextStyle(
                             color = neutralColor1,
                             fontSize = 8.sp,
@@ -180,7 +195,7 @@ fun CardRecommendationItem(
                         )
                 ){
                     Text(
-                        text = "145g Fat",
+                        text = stringResource(id = R.string.fat, planner.lemak),
                         style = TextStyle(
                             fontSize = 8.sp,
                             lineHeight = 12.sp,
@@ -199,7 +214,189 @@ fun CardRecommendationItem(
                         )
                 ){
                     Text(
-                        text = "30g Carbs",
+                        text = stringResource(id = R.string.carbs, planner.karbohidrat),
+                        style = TextStyle(
+                            fontSize = 8.sp,
+                            lineHeight = 12.sp,
+                            fontFamily = FontFamily(Font(R.font.inter_regular)),
+                            fontWeight = FontWeight(700),
+                        )
+                    )
+                }
+            }
+
+        }
+
+    }
+}
+
+
+@Composable
+fun CardRecommendationItem(
+    planner: GetDataMealPlanner,
+    modifier: Modifier = Modifier,
+){
+    Card(
+        modifier = modifier
+            .shadow(
+                elevation = 3.dp,
+                shape = Shapes.small,
+                spotColor = pSmashedPumpkin,
+                ambientColor = pSmashedPumpkin
+            )
+            .clip(Shapes.extraSmall)
+            .fillMaxWidth()
+            .height(120.dp)
+            .border(BorderStroke(1.dp, color = sBabyPink), Shapes.extraSmall),
+        colors = CardDefaults.cardColors(
+            containerColor = solidWhite
+        )
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start,
+            modifier = modifier
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, end = 8.dp)
+            ){
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ){
+                    Image(
+                        painter = painterResource(R.drawable.baseline_fastfood_24),
+                        contentDescription ="Menu 1",
+                        contentScale = ContentScale.FillBounds,
+                        modifier = modifier
+                            .padding(start = 16.dp, end = 8.dp)
+                            .width(22.dp)
+                            .height(22.dp)
+                            .clip(Shapes.extraSmall)
+                    )
+                    Text(
+                        text = planner.tipe,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = pSmashedPumpkin,
+                        modifier = Modifier
+                    )
+                }
+                Box(
+                    modifier = modifier
+                        .widthIn(50.dp)
+                        .clip(Shapes.extraSmall)
+                        .background(color = pSmashedPumpkin)
+                        .padding(
+                            horizontal = 8.dp,
+                            vertical = 2.dp,
+                        )
+                ){
+                    Text(
+                        text = stringResource(id = R.string.recommend_card_calorries, planner.kalori),
+                        style = TextStyle(
+                            color = solidWhite,
+                            fontSize = 10.sp,
+                            lineHeight = 12.sp,
+                            fontFamily = FontFamily(Font(R.font.inter_regular)),
+                            fontWeight = FontWeight(700),
+                        )
+                    )
+                }
+            }
+            Spacer(modifier = modifier.height(12.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = modifier
+                    .padding(end = 8.dp)
+            ){
+                Image(
+                    painter = rememberAsyncImagePainter(
+                        model = planner.imageUrl,
+//                        onLoading = {
+//                            CircularProgressAnimated()
+//                        }
+                    ),
+                    contentDescription = "image description",
+                    contentScale = ContentScale.FillBounds,
+                    modifier = modifier
+                        .padding(horizontal = 8.dp)
+                        .width(40.dp)
+                        .height(40.dp)
+                        .clip(Shapes.extraSmall)
+                )
+                Text(
+                    text = planner.namaMakananClean,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = neutralColor1,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 2.dp)
+                )
+            }
+            Spacer(modifier = modifier.height(12.dp))
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ){
+                Box(
+                    modifier = modifier
+                        .widthIn(50.dp)
+                        .clip(Shapes.extraSmall)
+                        .background(color = neutralColor5)
+                        .padding(
+                            horizontal = 8.dp,
+                            vertical = 2.dp,
+                        )
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.recommend_card_protein, planner.protein),
+                        style = TextStyle(
+                            color = neutralColor1,
+                            fontSize = 8.sp,
+                            lineHeight = 12.sp,
+                            fontFamily = FontFamily(Font(R.font.inter_regular)),
+                            fontWeight = FontWeight(700),
+                        )
+                    )
+                }
+                Box(
+                    modifier = modifier
+                        .clip(Shapes.extraSmall)
+                        .background(color = neutralColor5)
+                        .padding(
+                            horizontal = 8.dp,
+                            vertical = 2.dp,
+                        )
+                ){
+                    Text(
+                        text = stringResource(id = R.string.recommend_card_fat, planner.lemak),
+                        style = TextStyle(
+                            fontSize = 8.sp,
+                            lineHeight = 12.sp,
+                            fontFamily = FontFamily(Font(R.font.inter_regular)),
+                            fontWeight = FontWeight(700),
+                        )
+                    )
+                }
+                Box(
+                    modifier = modifier
+                        .clip(Shapes.extraSmall)
+                        .background(color = neutralColor5)
+                        .padding(
+                            horizontal = 8.dp,
+                            vertical = 2.dp,
+                        )
+                ){
+                    Text(
+                        text = stringResource(id = R.string.reccomend_card_carbs, planner.karbohidrat),
                         style = TextStyle(
                             fontSize = 8.sp,
                             lineHeight = 12.sp,
@@ -219,6 +416,6 @@ fun CardRecommendationItem(
 @Composable
 fun CardRecommendationItemPreview() {
     NutriMateTheme {
-        CardRecommendationItem()
+//        CardRecommendationItem()
     }
 }

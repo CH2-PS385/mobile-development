@@ -1,14 +1,14 @@
 package com.ch2ps385.nutrimate.presentation.screen.user.preferences
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ch2ps385.nutrimate.common.Constants
 import com.ch2ps385.nutrimate.common.Resource
-import com.ch2ps385.nutrimate.data.remote.model.AddUserByEmail
-import com.ch2ps385.nutrimate.data.remote.responses.AddUserByEmailResponse
-import com.ch2ps385.nutrimate.data.remote.responses.Data
+import com.ch2ps385.nutrimate.data.remote.model.AddAllergies
+import com.ch2ps385.nutrimate.data.remote.model.AddUserPreferences
+import com.ch2ps385.nutrimate.data.remote.responses.AddAllergiesResponse
+import com.ch2ps385.nutrimate.data.remote.responses.AddUserPreferencesResponse
 import com.ch2ps385.nutrimate.data.remote.responses.DataGetUser
 import com.ch2ps385.nutrimate.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,10 +18,14 @@ import kotlinx.coroutines.launch
 class UserPreferencesViewModel(private val repository : UserRepository):ViewModel() {
 
 
-    private val _stateAddUser: MutableStateFlow<Resource<AddUserByEmailResponse>> =
+    private val _stateUserPreferences: MutableStateFlow<Resource<AddUserPreferencesResponse>> =
         MutableStateFlow(Resource.Loading())
 
-    val stateAddUser: StateFlow<Resource<AddUserByEmailResponse>> get() = _stateAddUser
+    val stateUserPreferences: StateFlow<Resource<AddUserPreferencesResponse>> get() = _stateUserPreferences
+
+    private val _stateAllergies : MutableStateFlow<Resource<AddAllergiesResponse>> = MutableStateFlow(Resource.Loading())
+
+    val stateAllergies : StateFlow<Resource<AddAllergiesResponse>> get() = _stateAllergies
 
     private val _stateGetUser: MutableStateFlow<Resource<DataGetUser>> =
         MutableStateFlow(Resource.Loading())
@@ -39,38 +43,27 @@ class UserPreferencesViewModel(private val repository : UserRepository):ViewMode
 //            }
 //        }
 //    }
-    fun getUserByEmail(email : String){
-        viewModelScope.launch {
-            _stateGetUser.value = Resource.Loading()
-            _stateGetUser.value = Resource.Success(repository.getDataUser(email))
+
+    fun addUserPreferences(addUserPreferences: AddUserPreferences){
+        viewModelScope.launch { 
+            _stateUserPreferences.value = Resource.Loading()
+            try {
+                val addUserPreferences = repository.addUserPreferences(addUserPreferences)
+                _stateUserPreferences.value = Resource.Success(addUserPreferences.data!!)
+            } catch ( e : Exception){
+                _stateUserPreferences.value = Resource.Error("[ View Model ] addUserPreferences: ${e.message}")
+            }
         }
     }
 
-    fun addUserByEmail(addUserByEmail: AddUserByEmail) {
+    fun addAllergies(addAllergies: AddAllergies){
         viewModelScope.launch {
+            _stateAllergies.value = Resource.Loading()
             try {
-                _stateAddUser.value = Resource.Loading()
-
-                // Log before making the API call
-                Log.d("UserPreferencesViewModel", "Adding user by email: $addUserByEmail")
-
-                val result = repository.addUserByEmail(addUserByEmail)
-
-                // Log the API call result
-                Log.d("UserPreferencesViewModel", "API Response: $result")
-
-                if (result is Resource.Success) {
-                    val addUserResponse = result.data!!
-                    _stateAddUser.value = Resource.Success(addUserResponse)
-                } else if (result is Resource.Error) {
-                    _stateAddUser.value = Resource.Error(result.message!!)
-                    // Log the error message
-                    Log.e("UserPreferencesViewModel", "Error adding user by email: ${result.message}")
-                }
-            } catch (e: Exception) {
-                _stateAddUser.value = Resource.Error("An unknown error occurred")
-                // Log the exception
-                Log.e("UserPreferencesViewModel", "Exception adding user by email", e)
+                val addAllergies = repository.addAllergies(addAllergies)
+                _stateAllergies.value = Resource.Success(addAllergies.data!!)
+            } catch ( e : Exception){
+                _stateAllergies.value = Resource.Error("[ View Model ] addAllergies: ${e.message}")
             }
         }
     }

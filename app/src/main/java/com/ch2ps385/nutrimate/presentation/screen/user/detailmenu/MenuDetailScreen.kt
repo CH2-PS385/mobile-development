@@ -48,6 +48,7 @@ import com.ch2ps385.nutrimate.common.Resource
 import com.ch2ps385.nutrimate.data.remote.responses.Data
 import com.ch2ps385.nutrimate.di.Injection
 import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
+import com.ch2ps385.nutrimate.presentation.ui.component.other.CircularProgressAnimated
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor4
@@ -340,24 +341,6 @@ fun VerticalDivider(
     )
 }
 
-@Composable
-private fun CircularProgressAnimated(){
-    val progressValue = 0.75f
-    val infiniteTransition = rememberInfiniteTransition()
-
-    val progressAnimationValue by infiniteTransition.animateFloat(
-        initialValue = 0.0f,
-        targetValue = progressValue,animationSpec = infiniteRepeatable(animation = tween(900)))
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp), // Adjust the padding as needed
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(progress = progressAnimationValue)
-    }
-}
 
 
 

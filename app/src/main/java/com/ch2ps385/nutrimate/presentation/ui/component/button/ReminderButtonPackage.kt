@@ -50,7 +50,6 @@ import com.ch2ps385.nutrimate.presentation.ui.theme.solidWhite
 
 @Composable
 fun ReminderButtonPackage(
-
 ){
     var selectedButtonIndex by remember { mutableStateOf(-1) }
 
@@ -124,8 +123,11 @@ fun ReminderButtonPackage(
             onClick = {
                 // Tambahkan nilai yang dipilih ke dalam daftar
                 if (selectedButtonIndex != -1) {
-                    selectedValues.value = selectedValues.value + mlValues[selectedButtonIndex]
+                    val selectedWaterIntake = mlValues[selectedButtonIndex]
+                    selectedValues.value = selectedValues.value + selectedWaterIntake
                     selectedButtonIndex = -1 // Reset pemilihan
+
+
                 }
             },
             colors = ButtonDefaults.buttonColors(
