@@ -124,5 +124,7 @@ dependencies {
     implementation ("com.maxkeppeler.sheets-compose-dialogs:state:1.2.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
-
+    // Pager and Indicators - Accompanist
+    implementation ("com.google.accompanist:accompanist-pager:0.24.2-alpha")
+    implementation ("com.google.accompanist:accompanist-pager-indicators:0.24.2-alpha")
 }

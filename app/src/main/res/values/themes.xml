@@ -2,4 +2,12 @@
 <resources>
 
     <style name="Theme.NutriMate" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_white</item>
+        <item name="windowSplashScreenAnimationDuration">600</item>
+        <item name="postSplashScreenTheme">@style/Theme.NutriMate</item>
+    </style>
+
 </resources>

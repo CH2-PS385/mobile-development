@@ -20,6 +20,8 @@ sealed class Screen(val route: String){
 
     object EditUserPreferences: Screen("edituserpreferences")
 
+    object WelcomeScreen: Screen("welcome")
+
 
 
 

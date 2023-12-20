@@ -33,6 +33,7 @@ import com.ch2ps385.nutrimate.di.Injection
 import com.ch2ps385.nutrimate.presentation.screen.auth.signin.GoogleAuthUiClient
 import com.ch2ps385.nutrimate.presentation.screen.auth.signin.SignInScreen
 import com.ch2ps385.nutrimate.presentation.screen.auth.signin.SignInViewModel
+import com.ch2ps385.nutrimate.presentation.screen.onboarding.WelcomeScreen
 import com.ch2ps385.nutrimate.presentation.screen.profile.about.AboutScreen
 import com.ch2ps385.nutrimate.presentation.screen.profile.profile.ProfileScreen
 import com.ch2ps385.nutrimate.presentation.screen.profile.profiledetail.ProfileDetailScreen
@@ -69,6 +70,8 @@ fun NutriMateApp(
     }
     val coroutineScope = rememberCoroutineScope()
 
+    val isLoggedIn = googleAuthUiClient.getSignedInUser() != null
+
     Scaffold(
         topBar = {
             Toolbar(navController = navController)
@@ -79,7 +82,7 @@ fun NutriMateApp(
     ) {innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.SignIn.route,
+            startDestination = if (isLoggedIn) Screen.Home.route else Screen.WelcomeScreen.route,
             modifier = Modifier.padding(innerPadding)
         ){
             composable(Screen.SignIn.route){
@@ -294,6 +297,11 @@ fun NutriMateApp(
                     userData = googleAuthUiClient.getSignedInUser(),
                     navController = navController
                 )
+            }
+            composable(
+                Screen.WelcomeScreen.route
+            ){
+                WelcomeScreen(navController = navController)
             }
 
 
