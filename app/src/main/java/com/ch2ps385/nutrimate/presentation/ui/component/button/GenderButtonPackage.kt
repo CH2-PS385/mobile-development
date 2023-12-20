@@ -44,7 +44,7 @@ fun GenderButtonPackage(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .width(136.dp)
+            .width(120.dp)
             .height(56.dp)
             .padding(horizontal = 4.dp)
             .clip(Shapes.medium)

@@ -319,14 +319,6 @@ fun ReminderScreen(
                         )
                     )
                 }
-                val result = (state.data?.data?.sum).toString()
-                ReminderContent(
-                    viewModel = viewModel,
-                    userData = userData,
-                    successAddState = successAddState,
-                    failedAddState = failedAddState,
-                    sumWaterIntake = result)
-                // Logic to set dialog
                 LaunchedEffect(Unit){
                     if(viewModel.isDialogShown.value){
                         successAddState.show()
@@ -340,7 +332,7 @@ fun ReminderScreen(
             is Resource.Error -> {
                 LaunchedEffect(Unit){
                     if(viewModel.isDialogShown.value){
-                        successAddState.show()
+                        failedAddState.show()
                         delay(3000)
                         failedAddState.finish()
                         viewModel.onDismissDialog()
@@ -568,6 +560,14 @@ fun ReminderContent(
 @Preview(showBackground = true)
 fun ReminderScreenPreview() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//        ReminderScreen()
+        val userData = UserData(
+            email = "example@example.com",
+            userId = "1213",
+            username = "adi",
+            profilePictureUrl = "klandnadabdw"
+        ) // Gantilah dengan data sesuai kebutuhan
+        ReminderScreen(userData = userData, viewModel = viewModel(
+                factory = UserViewModelFactory(Injection.provideUserRepository(LocalContext.current))
+                ),)
     }
 }
