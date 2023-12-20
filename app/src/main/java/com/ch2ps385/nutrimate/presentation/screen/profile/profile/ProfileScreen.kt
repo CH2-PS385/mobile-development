@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,7 +50,12 @@ import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor3
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor4
 import com.google.android.gms.auth.api.identity.Identity
+import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
+import com.maxkeppeler.sheets.state.StateDialog
+import com.maxkeppeler.sheets.state.models.State
+import com.maxkeppeler.sheets.state.models.StateConfig
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -250,6 +256,7 @@ fun ProfileScreen(
 //    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileContent(
     userData: UserData?,
@@ -265,6 +272,14 @@ fun ProfileContent(
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
     }
+
+    val successAddState = rememberUseCaseState()
+    val successConfigState = State.Success(labelText = "Yeay, logged out succeed")
+    StateDialog(
+        state = successAddState,
+        config = StateConfig(state = successConfigState),
+    )
+
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -409,11 +424,9 @@ fun ProfileContent(
                 onClick = {
                     coroutineScope.launch {
                         googleAuthUiClient.signOut()
-                        Toast.makeText(
-                            applicationContext,
-                            "Signed out",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        successAddState.show()
+                        delay(2000)
+                        successAddState.finish()
 //                            navController.popBackStack(Screen.SignIn.route, true)
                         navController.popBackStack()
 //                            navController.navigate(Screen.SignIn.route)

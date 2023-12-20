@@ -180,7 +180,6 @@ fun ReminderScreen(
 
     val startHour = 6
     val endHour = 22
-    val repeatIntervalHours = 2
 
     LaunchedEffect(key1 = true){
         val currentDate = LocalDate.now()

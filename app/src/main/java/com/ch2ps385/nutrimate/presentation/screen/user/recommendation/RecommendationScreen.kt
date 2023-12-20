@@ -10,6 +10,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -98,6 +99,7 @@ fun RecommendationScreen(
     viewModel : RecommendationViewModel = viewModel(
         factory = UserViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
+    navigateToDetail: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -220,7 +222,7 @@ fun RecommendationScreen(
                 .height(32.dp)
         ) {
             Image(
-                painterResource(id = R.drawable.ic_save),
+                painterResource(id = R.drawable.ic_calendar),
                 contentDescription = "Date",
                 modifier = Modifier.size(20.dp)
             )
@@ -276,12 +278,12 @@ fun RecommendationScreen(
                 .height(32.dp)
         ) {
             Image(
-                painterResource(id = R.drawable.ic_save),
-                contentDescription = "Date",
+                painterResource(id = R.drawable.ic_refresh),
+                contentDescription = "Generate",
                 modifier = Modifier.size(20.dp)
             )
             Text(
-                text = "Regenerate a New Meal Planner",
+                text = "Generate a New Meal Planner",
                 Modifier.padding(start = 10.dp),
                 style = MaterialTheme.typography.labelSmall
             )
@@ -304,7 +306,7 @@ fun RecommendationScreen(
                 }
                 is Resource.Success -> {
                     if (!state.data?.isEmpty!!) {
-                        GetRecommendationContent( plannerList = state.data)
+                        GetRecommendationContent( plannerList = state.data, navigateToDetail = navigateToDetail)
                     } else{
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -365,7 +367,7 @@ fun RecommendationScreen(
                             )
                         )
                     }
-                    PostRecommendationContent(plannerList = state.data!!)
+                    PostRecommendationContent(plannerList = state.data!!, navigateToDetail = navigateToDetail)
                     LaunchedEffect(Unit){
                         if(viewModel.isDialogShown.value){
                             successAddState.show()
@@ -396,6 +398,7 @@ fun RecommendationScreen(
 fun PostRecommendationContent(
     plannerList: AddMealPlannerResponse,
     modifier: Modifier = Modifier,
+    navigateToDetail: (Long) -> Unit,
 ){
 
     if(plannerList != null){
@@ -460,6 +463,10 @@ fun PostRecommendationContent(
                     name = menu.namaMakananClean,
                     tipe = menu.tipe,
                     imageUrl = menu.imageUrl,
+                    modifier = Modifier
+                        .clickable {
+                            navigateToDetail(menu.foodId.toLong())
+                        }
                 )
             }
         }
@@ -473,6 +480,7 @@ fun PostRecommendationContent(
 fun GetRecommendationContent(
     plannerList: GetMealPlannerResponse,
     modifier: Modifier = Modifier,
+    navigateToDetail: (Long) -> Unit,
 ){
     if(!plannerList.isEmpty){
         LazyVerticalGrid(
@@ -536,6 +544,10 @@ fun GetRecommendationContent(
                     name = menu.namaMakananClean,
                     tipe = menu.tipe,
                     imageUrl = menu.imageUrl,
+                    modifier = Modifier
+                        .clickable {
+                            navigateToDetail(menu.foodId.toLong())
+                        }
                 )
             }
         }
@@ -544,13 +556,13 @@ fun GetRecommendationContent(
     }
 }
 
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-@Preview(showBackground = true)
-fun RecommendationScreenPreview() {
-    RecommendationScreen(
-        navController = rememberNavController(),
-        userData = null // Isi dengan data pengguna default atau null jika tidak ada
-    )
-}
+//
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//@Preview(showBackground = true)
+//fun RecommendationScreenPreview() {
+//    RecommendationScreen(
+//        navController = rememberNavController(),
+//        userData = null // Isi dengan data pengguna default atau null jika tidak ada
+//    )
+//}
