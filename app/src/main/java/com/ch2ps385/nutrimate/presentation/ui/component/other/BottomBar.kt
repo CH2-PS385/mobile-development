@@ -117,7 +117,8 @@ fun BottomBar(
         Screen.ProfileDetail.route,
         Screen.Register.route,
         Screen.MenuDetail.route,
-        Screen.WelcomeScreen.route
+        Screen.WelcomeScreen.route,
+        Screen.EditUserPreferences.route
     )
 
     // Cek apakah rute saat ini memerlukan bottom bar

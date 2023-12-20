@@ -10,6 +10,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,10 +50,16 @@ import com.ch2ps385.nutrimate.presentation.ui.component.other.BottomBar
 import com.ch2ps385.nutrimate.presentation.ui.component.other.Toolbar
 import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 import com.google.android.gms.auth.api.identity.Identity
+import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
+import com.maxkeppeler.sheets.state.StateDialog
+import com.maxkeppeler.sheets.state.models.State
+import com.maxkeppeler.sheets.state.models.StateConfig
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.internal.platform.android.BouncyCastleSocketAdapter.Companion.factory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NutriMateApp(
@@ -71,6 +78,22 @@ fun NutriMateApp(
     val coroutineScope = rememberCoroutineScope()
 
     val isLoggedIn = googleAuthUiClient.getSignedInUser() != null
+
+
+    val successAddState = rememberUseCaseState()
+    val successConfigState = State.Success(labelText = "Yeay, logged in successfully!")
+    StateDialog(
+        state = successAddState,
+        config = StateConfig(state = successConfigState),
+    )
+
+    val failedAddState = rememberUseCaseState()
+    val  failedConfigState = State.Failure(labelText = "Opss, try again!")
+
+    StateDialog(
+        state = failedAddState,
+        config = StateConfig(state = failedConfigState),
+    )
 
     Scaffold(
         topBar = {
@@ -112,14 +135,24 @@ fun NutriMateApp(
                                     viewModel.checkIsUserPreferencesFilled(userData?.email)
                                 }
                                 is Resource.Success -> {
-                                    if (state.data == true) { // Periksa hasil sebenarnya (state.data)
-                                        navController.navigate(Screen.Home.route)
-                                    } else {
-                                        navController.navigate(Screen.UserPreferences.route)
+                                    LaunchedEffect(Unit){
+                                        successAddState.show()
+                                        delay(500)
+                                        successAddState.finish()
+                                        if (state.data == true) { // Periksa hasil sebenarnya (state.data)
+                                            navController.navigate(Screen.Home.route)
+                                        } else {
+                                            navController.navigate(Screen.UserPreferences.route)
+                                        }
                                     }
                                 }
                                 is Resource.Error -> {
-                                    navController.navigate(Screen.Home.route)
+                                    failedAddState.show()
+                                    LaunchedEffect(Unit){
+                                        delay(2000)
+                                        failedAddState.finish()
+                                    }
+//                                    navController.navigate(Screen.Home.route)
                                 }
                                 else->{}
                             }
@@ -137,14 +170,24 @@ fun NutriMateApp(
                                     viewModel.checkIsUserPreferencesFilled(userData?.email)
                                 }
                                 is Resource.Success -> {
-                                    if (state.data == true) { // Periksa hasil sebenarnya (state.data)
-                                        navController.navigate(Screen.Home.route)
-                                    } else {
-                                        navController.navigate(Screen.UserPreferences.route)
+                                    LaunchedEffect(Unit){
+                                        successAddState.show()
+                                        delay(500)
+                                        successAddState.finish()
+                                        if (state.data == true) { // Periksa hasil sebenarnya (state.data)
+                                            navController.navigate(Screen.Home.route)
+                                        } else {
+                                            navController.navigate(Screen.UserPreferences.route)
+                                        }
                                     }
                                 }
                                 is Resource.Error -> {
-                                    navController.navigate(Screen.Home.route)
+                                    failedAddState.show()
+                                    LaunchedEffect(Unit){
+                                        delay(2000)
+                                        failedAddState.finish()
+                                    }
+//                                    navController.navigate(Screen.Home.route)
                                 }
                                 else->{}
                             }
@@ -246,7 +289,13 @@ fun NutriMateApp(
             }
             composable(Screen.Planner.route){
                 val userData = googleAuthUiClient.getSignedInUser()
-                RecommendationScreen(userData = userData, navController = navController)
+                RecommendationScreen(
+                    userData = userData,
+                    navController = navController,
+                    navigateToDetail = { foodId ->
+                        navController.navigate(Screen.MenuDetail.createRoute(foodId))
+                    }
+                )
             }
             composable(Screen.Menu.route){
                 MenuScreen(

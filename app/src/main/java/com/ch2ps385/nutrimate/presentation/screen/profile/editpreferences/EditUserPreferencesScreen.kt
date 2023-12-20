@@ -105,6 +105,7 @@ fun EditUserPreferencesScreen(
             }
             is Resource.Success -> {
                 LaunchedEffect(Unit){
+                    viewModel.getDataUserPref(userData?.email!!)
                     if(viewModel.isDialogShown.value){
                         successAddState.show()
                         delay(3000)

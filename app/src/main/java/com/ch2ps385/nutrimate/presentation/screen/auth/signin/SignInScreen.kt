@@ -195,7 +195,7 @@ fun SignInScreen(
                     )
                 }
                 Button(
-                    onClick = {},
+                    onClick = onSignInClick,
                     border = BorderStroke(1.dp, color = neutralColor1),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = neutralColor1),
                     modifier = modifier
@@ -204,12 +204,12 @@ fun SignInScreen(
                         .height(40.dp)
                 ) {
                     Image(
-                        painterResource(id = R.drawable.ic_email),
-                        contentDescription ="Cart button icon",
+                        painterResource(id = R.drawable.ic_google),
+                        contentDescription ="Sign up with Google",
                         modifier = Modifier.size(20.dp))
 
                     Text(
-                        text = "Sign up with Email",
+                        text = "Sign up with Google",
                         Modifier.padding(start = 10.dp),
                         style = MaterialTheme.typography.displayMedium
                     )
@@ -223,8 +223,8 @@ fun SignInScreen(
                         .height(40.dp)
                 ) {
                     Image(
-                        painterResource(id = R.drawable.ic_email),
-                        contentDescription ="Cart button icon",
+                        painterResource(id = R.drawable.ic_google),
+                        contentDescription ="Sign IN button",
                         modifier = Modifier.size(20.dp))
                     Text(
                         text = "Sign In with Google",
