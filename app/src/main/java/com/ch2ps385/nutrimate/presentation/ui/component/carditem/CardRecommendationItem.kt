@@ -50,10 +50,10 @@ import com.ch2ps385.nutrimate.presentation.ui.theme.solidWhite
 
 @Composable
 fun CardRecommendationItem(
-    callories : Int,
-    protein: Int,
-    fat : Int,
-    carbs : Int,
+    callories : String,
+    protein: String,
+    fat : String,
+    carbs : String,
     name : String,
     imageUrl : String,
     tipe : String,
@@ -119,7 +119,7 @@ fun CardRecommendationItem(
                         )
                 ){
                     Text(
-                        text = stringResource(id = R.string.recommend_card_calorries, callories.toString()),
+                        text = stringResource(id = R.string.recommend_card_calorries, callories),
                         style = TextStyle(
                             color = solidWhite,
                             fontSize = 10.sp,
@@ -180,7 +180,7 @@ fun CardRecommendationItem(
                         )
                 ) {
                     Text(
-                        text = stringResource(id = R.string.recommend_card_protein, protein.toString()),
+                        text = stringResource(id = R.string.recommend_card_protein, protein),
                         style = TextStyle(
                             color = neutralColor1,
                             fontSize = 8.sp,
@@ -200,7 +200,7 @@ fun CardRecommendationItem(
                         )
                 ){
                     Text(
-                        text = stringResource(id = R.string.recommend_card_fat, fat.toString()),
+                        text = stringResource(id = R.string.recommend_card_fat, fat),
                         style = TextStyle(
                             fontSize = 8.sp,
                             lineHeight = 12.sp,
@@ -219,7 +219,7 @@ fun CardRecommendationItem(
                         )
                 ){
                     Text(
-                        text = stringResource(id = R.string.reccomend_card_carbs, carbs.toString()),
+                        text = stringResource(id = R.string.reccomend_card_carbs, carbs),
                         style = TextStyle(
                             fontSize = 8.sp,
                             lineHeight = 12.sp,

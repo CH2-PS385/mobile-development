@@ -427,9 +427,8 @@ fun ProfileContent(
                         successAddState.show()
                         delay(2000)
                         successAddState.finish()
-//                            navController.popBackStack(Screen.SignIn.route, true)
-                        navController.popBackStack()
-//                            navController.navigate(Screen.SignIn.route)
+                        navController.popBackStack(Screen.Home.route, true)
+                        navController.navigate(Screen.WelcomeScreen.route)
                     }
                 }
             )

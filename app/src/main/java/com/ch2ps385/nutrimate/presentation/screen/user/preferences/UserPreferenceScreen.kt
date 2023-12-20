@@ -2,6 +2,7 @@ package com.ch2ps385.nutrimate.presentation.screen.user.preferences
 
 import android.content.ContentValues
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -47,6 +49,7 @@ import com.ch2ps385.nutrimate.data.remote.UserData
 import com.ch2ps385.nutrimate.data.remote.model.AddAllergies
 import com.ch2ps385.nutrimate.data.remote.model.AddUserPreferences
 import com.ch2ps385.nutrimate.di.Injection
+import com.ch2ps385.nutrimate.presentation.screen.auth.signin.GoogleAuthUiClient
 import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
 import com.ch2ps385.nutrimate.presentation.ui.component.button.CustomCheckBoxButton
 import com.ch2ps385.nutrimate.presentation.ui.component.button.GenderButtonPackage
@@ -55,15 +58,18 @@ import com.ch2ps385.nutrimate.presentation.ui.component.textfields.TextFieldsPre
 import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
+import com.google.android.gms.auth.api.identity.Identity
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.state.StateDialog
 import com.maxkeppeler.sheets.state.models.State
 import com.maxkeppeler.sheets.state.models.StateConfig
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserPreferenceScreen(
+    googleAuthUiClient:GoogleAuthUiClient,
     userData : UserData?,
     navController: NavController, // Added callback for navigation to home
     viewModel : UserPreferencesViewModel = viewModel(
@@ -71,6 +77,28 @@ fun UserPreferenceScreen(
     ),
     modifier : Modifier = Modifier,
 ){
+
+    val coroutineScope = rememberCoroutineScope()
+
+    BackHandler {
+        if (userData != null) {
+            // Jika pengguna telah masuk, lakukan proses sign-out
+            coroutineScope.launch {
+                googleAuthUiClient.signOut()
+
+                // Navigasikan ke halaman login
+                navController.navigate(Screen.SignIn.route) {
+                    // Hindari kembali ke UserPreferencesScreen setelah sign-out
+                    popUpTo(Screen.SignIn.route) {
+                        inclusive = true
+                    }
+                }
+            }
+        } else {
+            // Jika pengguna belum masuk, kembali biasa
+            navController.popBackStack()
+        }
+    }
 
     val sucessAddState = rememberUseCaseState()
     val successConfigState = State.Success(labelText = "Data Preferences has been saved!")

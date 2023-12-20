@@ -456,10 +456,10 @@ fun PostRecommendationContent(
             }
             items(plannerList.data){ menu ->
                 CardRecommendationItem(
-                    callories = plannerList.nutrition.calories,
-                    protein = plannerList.nutrition.protein,
-                    fat = plannerList.nutrition.fat,
-                    carbs = plannerList.nutrition.carbs,
+                    callories = menu.kalori.toString(),
+                    protein = menu.protein.toString(),
+                    fat = menu.lemak.toString(),
+                    carbs = menu.karbohidrat.toString(),
                     name = menu.namaMakananClean,
                     tipe = menu.tipe,
                     imageUrl = menu.imageUrl,
@@ -537,10 +537,10 @@ fun GetRecommendationContent(
             }
             items(plannerList.data){ menu ->
                 CardRecommendationItem(
-                    callories = plannerList.nutrition.calories,
-                    protein = plannerList.nutrition.protein,
-                    fat = plannerList.nutrition.fat,
-                    carbs = plannerList.nutrition.carbs,
+                    callories = menu.kalori.toString(),
+                    protein = menu.protein.toString(),
+                    fat = menu.lemak.toString(),
+                    carbs = menu.karbohidrat.toString(),
                     name = menu.namaMakananClean,
                     tipe = menu.tipe,
                     imageUrl = menu.imageUrl,
