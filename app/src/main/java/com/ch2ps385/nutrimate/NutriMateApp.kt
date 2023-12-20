@@ -40,6 +40,7 @@ import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
 import com.ch2ps385.nutrimate.presentation.screen.user.detailmenu.MenuDetailScreen
 import com.ch2ps385.nutrimate.presentation.screen.user.home.HomeScreen
 import com.ch2ps385.nutrimate.presentation.screen.user.menu.MenuScreen
+import com.ch2ps385.nutrimate.presentation.screen.user.preferences.EditUserPreferencesScreen
 import com.ch2ps385.nutrimate.presentation.screen.user.preferences.UserPreferenceScreen
 import com.ch2ps385.nutrimate.presentation.screen.user.recommendation.RecommendationScreen
 import com.ch2ps385.nutrimate.presentation.screen.user.reminder.ReminderScreen
@@ -93,13 +94,7 @@ fun NutriMateApp(
 //                }
 
                 if(state.isSignInSuccessful) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Sign in successful",
-                        Toast.LENGTH_LONG
-                    ).show()
                     val userData = googleAuthUiClient.getSignedInUser()
-
                     viewModel.addUserByEmail(
                         AddUserByEmail(
                             email = userData?.email!!,
@@ -291,6 +286,14 @@ fun NutriMateApp(
                     val userData = googleAuthUiClient.getSignedInUser()
                     ReminderScreen(userData = userData)
                 }
+            }
+            composable(
+                Screen.EditUserPreferences.route
+            ){
+                EditUserPreferencesScreen(
+                    userData = googleAuthUiClient.getSignedInUser(),
+                    navController = navController
+                )
             }
 
 

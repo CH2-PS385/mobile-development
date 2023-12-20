@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ch2ps385.nutrimate.R
@@ -47,6 +49,7 @@ import com.ch2ps385.nutrimate.data.remote.UserData
 import com.ch2ps385.nutrimate.data.remote.model.AddAllergies
 import com.ch2ps385.nutrimate.data.remote.model.AddUserPreferences
 import com.ch2ps385.nutrimate.di.Injection
+import com.ch2ps385.nutrimate.presentation.screen.profile.editpreferences.EditUserPreferencesViewModel
 import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
 import com.ch2ps385.nutrimate.presentation.ui.component.button.CustomCheckBoxButton
 import com.ch2ps385.nutrimate.presentation.ui.component.button.GenderButtonPackage
@@ -59,23 +62,24 @@ import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.state.StateDialog
 import com.maxkeppeler.sheets.state.models.State
 import com.maxkeppeler.sheets.state.models.StateConfig
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserPreferenceScreen(
+fun EditUserPreferencesScreen(
     userData : UserData?,
     navController: NavController, // Added callback for navigation to home
-    viewModel : UserPreferencesViewModel = viewModel(
+    viewModel : EditUserPreferencesViewModel = viewModel(
         factory = UserViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
     modifier : Modifier = Modifier,
 ){
 
-    val sucessAddState = rememberUseCaseState()
+    val successAddState = rememberUseCaseState()
     val successConfigState = State.Success(labelText = "Data Preferences has been saved!")
     StateDialog(
-        state = sucessAddState,
+        state = successAddState,
         config = StateConfig(state = successConfigState),
     )
 
@@ -88,7 +92,7 @@ fun UserPreferenceScreen(
     )
 
 
-    viewModel.stateUserPreferences.collectAsState().value.let { state ->
+    viewModel.stateUserPreferences.collectAsState().value.let {state ->
         when(state){
             is Resource.Initial -> {}
             is Resource.Loading ->{
@@ -100,19 +104,71 @@ fun UserPreferenceScreen(
                 }
             }
             is Resource.Success -> {
-                sucessAddState.show()
-                navController.navigate(Screen.Home.route)
+                LaunchedEffect(Unit){
+                    if(viewModel.isDialogShown.value){
+                        successAddState.show()
+                        delay(3000)
+                        successAddState.finish()
+                        viewModel.onDismissDialog()
+                    }
+                }
+            }
+            is Resource.Error -> {
+                LaunchedEffect(Unit){
+                    if(viewModel.isDialogShown.value){
+                        failedAddState.show()
+                        delay(3000)
+                        failedAddState.finish()
+                        viewModel.onDismissDialog()
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(viewModel){
+        viewModel.getDataUserPref(userData?.email!!)
+    }
+    viewModel.stateGetDataPreference.collectAsState().value.let { state ->
+        when(state){
+            is Resource.Initial -> {}
+            is Resource.Loading ->{
+                Log.d(ContentValues.TAG, "Loading of Saving user preferences...")
+                if (viewModel.isDialogLoadingShown.value) {
+                    FetchLoading(closeSelection = { viewModel.onDismissLoadingDialog() })
+                } else {
+                    Log.d(ContentValues.TAG, "Move to else branch...")
+                }
+            }
+            is Resource.Success -> {
+//                sucessAddState.show()
+                viewModel.age.value = state.data?.age.toString()
+                viewModel.height.value = state.data?.height.toString()
+                viewModel.weight.value = state.data?.weight.toString()
+                viewModel.setGender(state.data?.gender)
+                viewModel.setFoodPreferenceGet(state.data?.allergies)
+
+
                 Log.d("TAG", "Berhasil disubmit save preferencesnya!")
+                EditUserPreferencesContent(viewModel = viewModel, email = userData?.email!!)
             }
             is Resource.Error -> {
                 failedAddState.show()
             }
         }
     }
+}
+
+@Composable
+fun EditUserPreferencesContent(
+    viewModel: EditUserPreferencesViewModel,
+    modifier : Modifier = Modifier,
+    email:String
+){
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = Modifier
             .padding(29.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
@@ -188,13 +244,13 @@ fun UserPreferenceScreen(
                 GenderButtonPackage(
                     text = "Laki-Laki",
                     isSelected = viewModel.gender.value == Constants.Gender.Male,
-                    onClick = { viewModel.setGender(Constants.Gender.Male) }
+                    onClick = { viewModel.setGender("m") }
                 )
 
                 GenderButtonPackage(
                     text = "Perempuan",
                     isSelected = viewModel.gender.value == Constants.Gender.Female,
-                    onClick = { viewModel.setGender(Constants.Gender.Female) }
+                    onClick = { viewModel.setGender("f") }
                 )
             }
         }
@@ -225,7 +281,7 @@ fun UserPreferenceScreen(
                         text = item,
                         checked =  viewModel.foodPreferences.value[index],
                         onCheckedChange = { newChecked ->
-                            viewModel.setFoodPreference(index, newChecked)
+                            viewModel.setFoodPreference(index, newChecked, email)
                         },
                         index = index
                     )
@@ -233,44 +289,44 @@ fun UserPreferenceScreen(
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        // ...
-
         Button(
             onClick = {
-                if (viewModel.validateFields()) {
-                    val height = viewModel.height.value
-                    val weight = viewModel.weight.value
-                    val age = viewModel.age.value
-                    val gender = if (viewModel.gender.value == Constants.Gender.Male) "m" else "f"
-                    val allergies = foodItems.filterIndexed { index, _ ->
-                        viewModel.foodPreferences.value[index]
-                    }
-
-                    // Use the collected data as needed, for example, pass it to your ViewModel function
-                    viewModel.addUserPreferences(
-                        AddUserPreferences(
-                            email = userData?.email!!,
-                            height = height.toInt(),
-                            weight = weight.toInt(),
-                            age = age.toInt(),
-                            gender = gender,
-                        )
-                    )
-                    viewModel.addAllergies(
-                        AddAllergies(
-                            email = userData?.email!!,
-                            allergies = allergies
-                        )
-                    )
-                    viewModel.onSavePreferencesClick()
+                val height = viewModel.height.value
+                val weight = viewModel.weight.value
+                val age = viewModel.age.value
+                val gender = if (viewModel.gender.value == Constants.Gender.Male) "m" else "f"
+                val allergies = foodItems.filterIndexed { index, _ ->
+                    viewModel.foodPreferences.value[index]
                 }
+
+
+                Log.d("UserPreferenceScreen", "Height: $height, Weight: $weight, Age: $age, Gender: $gender, Allergies: $allergies")
+                // Use the collected data as needed, for example, pass it to your ViewModel function
+                viewModel.addUserPreferences(
+                    AddUserPreferences(
+                        email = email,
+                        height = height.toInt(),
+                        weight = weight.toInt(),
+                        age = age.toInt(),
+                        gender = gender,
+                    )
+                )
+                viewModel.addAllergies(
+                    AddAllergies(
+                        email = email,
+                        allergies = allergies
+                    )
+                )
+                viewModel.onSavePreferencesClick()
+
+
             },
             colors = ButtonDefaults.buttonColors(containerColor = pSinopia),
             modifier = modifier
                 .width(312.dp)
                 .height(40.dp),
-            enabled = viewModel.areFieldsFilled()
-        ) {
+
+            ) {
             Image(
                 painterResource(id = R.drawable.ic_save),
                 contentDescription = "Cart button icon",
@@ -282,56 +338,5 @@ fun UserPreferenceScreen(
                 style = MaterialTheme.typography.displayMedium
             )
         }
-
-//        Button(
-//            onClick = {
-//                val height = viewModel.height.value
-//                val weight = viewModel.weight.value
-//                val age = viewModel.age.value
-//                val gender = if (viewModel.gender.value == Constants.Gender.Male) "m" else "f"
-//                val allergies = foodItems.filterIndexed { index, _ ->
-//                    viewModel.foodPreferences.value[index]
-//                }
-//
-//
-//                Log.d("UserPreferenceScreen", "Height: $height, Weight: $weight, Age: $age, Gender: $gender, Allergies: $allergies")
-//                // Use the collected data as needed, for example, pass it to your ViewModel function
-//                viewModel.addUserPreferences(
-//                    AddUserPreferences(
-//                        email = userData?.email!!,
-//                        height = height.toInt(),
-//                        weight = weight.toInt(),
-//                        age = age.toInt(),
-//                        gender = gender,
-//                    )
-//                )
-//                viewModel.addAllergies(
-//                    AddAllergies(
-//                        email = userData?.email!!,
-//                        allergies = allergies
-//                    )
-//                )
-//                viewModel.onSavePreferencesClick()
-//
-//
-//            },
-//            colors = ButtonDefaults.buttonColors(containerColor = pSinopia),
-//            modifier = modifier
-//                .width(312.dp)
-//                .height(40.dp),
-//
-//        ) {
-//            Image(
-//                painterResource(id = R.drawable.ic_save),
-//                contentDescription = "Cart button icon",
-//                modifier = Modifier.size(20.dp)
-//            )
-//            Text(
-//                text = "Done",
-//                Modifier.padding(start = 10.dp),
-//                style = MaterialTheme.typography.displayMedium
-//            )
-//        }
     }
 }
-

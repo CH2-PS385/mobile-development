@@ -391,7 +391,7 @@ fun ProfileContent(
                 icon = painterResource(id = R.drawable.baseline_settings_24),
                 text = stringResource(id = R.string.change_preferences),
                 onClick = {
-                    navController.navigate(Screen.ProfileDetail.route)
+                    navController.navigate(Screen.EditUserPreferences.route)
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))

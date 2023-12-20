@@ -5,6 +5,8 @@ import android.content.ContentValues.TAG
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -63,7 +64,7 @@ import com.ch2ps385.nutrimate.data.remote.responses.GetMealPlannerResponse
 import com.ch2ps385.nutrimate.di.Injection
 import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
 import com.ch2ps385.nutrimate.presentation.ui.component.carditem.CardRecommendationItem
-import com.ch2ps385.nutrimate.presentation.ui.component.other.CircularProgressAnimated
+import com.ch2ps385.nutrimate.presentation.ui.component.other.FetchLoading
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor3
@@ -71,12 +72,16 @@ import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor4
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor6
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSmashedPumpkin
+import com.maxkeppeker.sheets.core.models.base.UseCaseState
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import com.maxkeppeler.sheets.state.StateDialog
+import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
+import com.maxkeppeler.sheets.state.StateDialog
+import com.maxkeppeler.sheets.state.models.ProgressIndicator
 import com.maxkeppeler.sheets.state.models.State
 import com.maxkeppeler.sheets.state.models.StateConfig
 import kotlinx.coroutines.delay
@@ -100,10 +105,26 @@ fun RecommendationScreen(
         mutableStateOf<LocalDate?>(null)
     }
 
-    val sucessAddState = rememberUseCaseState()
+
+
+//    val progress = remember { mutableStateOf(0f) }
+//    val progressAnimated = animateFloatAsState(targetValue = progress.value, tween(1000)).value
+//    LaunchedEffect(Unit) {
+//        progress.value = 1f
+//    }
+//
+//    val progressBar = rememberUseCaseState()
+//    val state = State.Loading("Wait a moment", ProgressIndicator.Circular(progressAnimated))
+//    StateDialog(
+//        state = progressBar,
+//        config = StateConfig(state = state),
+//    )
+
+
+    val successAddState = rememberUseCaseState()
     val successConfigState = State.Success(labelText = "Meal planner has been generated sucessfully!")
     StateDialog(
-        state = sucessAddState,
+        state = successAddState,
         config = StateConfig(state = successConfigState),
     )
 
@@ -216,7 +237,6 @@ fun RecommendationScreen(
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
-
                 if (selectedDate != null) {
                     Log.e(TAG, "LAUNCHED EFFECT : $selectedDate")
                     val date = selectedDate!!
@@ -232,6 +252,7 @@ fun RecommendationScreen(
                             yy = yyyy,
                         )
                     )
+                    viewModel.onGenerateClick()
                 } else {
                     val currentDate = LocalDate.now()
                     val dd: Int = currentDate.dayOfMonth
@@ -246,6 +267,7 @@ fun RecommendationScreen(
                             yy = yyyy,
                         )
                     )
+                    viewModel.onGenerateClick()
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = pSmashedPumpkin),
@@ -313,56 +335,21 @@ fun RecommendationScreen(
             }
         }
 
-//        LaunchedEffect(key1 = true){
-//            viewModel.stateRecommendationMeal.collect { state ->
-//                when(state){
-//                    is Resource.Loading ->{
-//                        Log.d(TAG, "Loading...")
-//                    }
-//                    is Resource.Success -> {
-//                        val currentDate = selectedDate ?: LocalDate.now()
-//                        val dd: Int = currentDate.dayOfMonth
-//                        val mm: Int = currentDate.monthValue
-//                        val yyyy: Int = currentDate.year
-//
-//                        viewModel.getMealPlanner(
-//                            GetMealPlanner(
-//                                email = userData?.email!!,
-//                                dd = dd,
-//                                mm = mm,
-//                                yy = yyyy,
-//                            )
-//                        )
-//                        sucessAddState.show()
-//                        delay(3000)
-//                        sucessAddState.hide()
-//                    }
-//
-//                    is Resource.Error -> {
-//
-//                    }
-//                    else->{}
-//                }
-//            }
-//        }
         viewModel.stateRecommendationMeal.collectAsState().value.let { state ->
             when(state){
                 is Resource.Initial -> {}
                 is Resource.Loading ->{
-                    Log.d(TAG, "Loading...")
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        CircularProgressIndicator(
-                            color = pSmashedPumpkin,
-                            modifier = Modifier
-                                .size(50.dp)
-                                .align(Alignment.Center)
-                        )
+                    Log.d(TAG, "Loading of Generating New Planner...")
+//                    sheetState.show()
+//                    progressBar.show()
+
+                    if (viewModel.isDialogLoadingShown.value) {
+                        FetchLoading(closeSelection = { viewModel.onDismissLoadingDialog() })
                     }
                 }
                 is Resource.Success -> {
+//                    progressBar.finish()
+//                    sheetState.finish()
                     LaunchedEffect(Unit) {
                         val currentDate = selectedDate ?: LocalDate.now()
                         val dd: Int = currentDate.dayOfMonth
@@ -377,14 +364,27 @@ fun RecommendationScreen(
                                 yy = yyyy,
                             )
                         )
-                        sucessAddState.show()
-                        delay(3000)
-                        sucessAddState.hide()
+                    }
+                    PostRecommendationContent(plannerList = state.data!!)
+                    LaunchedEffect(Unit){
+                        if(viewModel.isDialogShown.value){
+                            successAddState.show()
+                            delay(3000)
+                            successAddState.finish()
+                            viewModel.onDismissDialog()
+                        }
                     }
                 }
 
                 is Resource.Error -> {
-
+                    LaunchedEffect(Unit){
+                        if(viewModel.isDialogShown.value){
+                            successAddState.show()
+                            delay(3000)
+                            failedAddState.finish()
+                            viewModel.onDismissDialog()
+                        }
+                    }
                 }
                 else->{}
             }
@@ -397,6 +397,7 @@ fun PostRecommendationContent(
     plannerList: AddMealPlannerResponse,
     modifier: Modifier = Modifier,
 ){
+
     if(plannerList != null){
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
@@ -451,7 +452,15 @@ fun PostRecommendationContent(
                 }
             }
             items(plannerList.data){ menu ->
-                CardRecommendationItem(menu)
+                CardRecommendationItem(
+                    callories = plannerList.nutrition.calories,
+                    protein = plannerList.nutrition.protein,
+                    fat = plannerList.nutrition.fat,
+                    carbs = plannerList.nutrition.carbs,
+                    name = menu.namaMakananClean,
+                    tipe = menu.tipe,
+                    imageUrl = menu.imageUrl,
+                )
             }
         }
     } else{
@@ -519,7 +528,15 @@ fun GetRecommendationContent(
                 }
             }
             items(plannerList.data){ menu ->
-                CardRecommendationItem(planner = menu)
+                CardRecommendationItem(
+                    callories = plannerList.nutrition.calories,
+                    protein = plannerList.nutrition.protein,
+                    fat = plannerList.nutrition.fat,
+                    carbs = plannerList.nutrition.carbs,
+                    name = menu.namaMakananClean,
+                    tipe = menu.tipe,
+                    imageUrl = menu.imageUrl,
+                )
             }
         }
     } else{

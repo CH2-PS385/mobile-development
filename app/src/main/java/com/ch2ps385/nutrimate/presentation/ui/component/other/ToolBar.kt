@@ -112,7 +112,7 @@ fun getTitle(backStackEntry: NavBackStackEntry?): String {
     return backStackEntry?.destination?.route?.let { route ->
         when (route) {
             Screen.MenuDetail.route -> stringResource(id = R.string.toolbar_detail_menu)
-            Screen.ProfileDetail.route -> stringResource(id = R.string.toolbar_edit_preferences)
+            Screen.EditUserPreferences.route -> stringResource(id = R.string.toolbar_edit_preferences)
             // Add more cases for other screens
             else -> ""
         }

@@ -1,14 +1,14 @@
 package com.ch2ps385.nutrimate.presentation.screen.user.recommendation
 
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ch2ps385.nutrimate.common.Resource
 import com.ch2ps385.nutrimate.data.remote.model.AddMealPlanner
-import com.ch2ps385.nutrimate.data.remote.model.AddUserPreferences
 import com.ch2ps385.nutrimate.data.remote.model.GetMealPlanner
 import com.ch2ps385.nutrimate.data.remote.responses.AddMealPlannerResponse
-import com.ch2ps385.nutrimate.data.remote.responses.AddUserPreferencesResponse
 import com.ch2ps385.nutrimate.data.remote.responses.GetMealPlannerResponse
 import com.ch2ps385.nutrimate.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,5 +50,26 @@ class RecommendationViewModel(private val repository: UserRepository): ViewModel
                 _stateGetDataMealPlanner.value = Resource.Error("Failed to fetch data: ${e.message}")
             }
         }
+    }
+
+    // Menggunakan State bukan mutableStateOf untuk isDialogShown
+    private val _isDialogShown = mutableStateOf(false)
+    val isDialogShown: State<Boolean> get() = _isDialogShown
+
+    private val _isDialogLoadingShown = mutableStateOf(false)
+
+    val isDialogLoadingShown : State<Boolean> get() = _isDialogLoadingShown
+
+    fun onDismissLoadingDialog(){
+        _isDialogLoadingShown.value = false
+    }
+    // Mengganti nilai properti isDialogShown
+    fun onGenerateClick() {
+        _isDialogShown.value = true
+        _isDialogLoadingShown.value = true
+    }
+
+    fun onDismissDialog() {
+        _isDialogShown.value = false
     }
 }

@@ -18,6 +18,8 @@ sealed class Screen(val route: String){
 
     object ProfileDetail:Screen("profileDetail")
 
+    object EditUserPreferences: Screen("edituserpreferences")
+
 
 
 
