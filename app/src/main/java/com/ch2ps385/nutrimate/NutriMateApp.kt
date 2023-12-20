@@ -105,7 +105,8 @@ fun NutriMateApp(
     ) {innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = if (isLoggedIn) Screen.Home.route else Screen.WelcomeScreen.route,
+//            startDestination = if (isLoggedIn) Screen.UserPreferences.route else Screen.WelcomeScreen.route,
+            startDestination = Screen.WelcomeScreen.route,
             modifier = Modifier.padding(innerPadding)
         ){
             composable(Screen.SignIn.route){
@@ -113,13 +114,13 @@ fun NutriMateApp(
                 val state by viewModel.state.collectAsStateWithLifecycle()
 
                 // If user already logged in
-//                LaunchedEffect(key1 = Unit) {
-//                    if(googleAuthUiClient.getSignedInUser() != null) {
-//                        navController.navigate(Screen.Home.route)
-//                    }
-//                }
+                LaunchedEffect(key1 = Unit) {
+                    if(googleAuthUiClient.getSignedInUser() != null) {
+                        navController.navigate(Screen.Home.route)
+                    }
+                }
 
-                if(state.isSignInSuccessful) {
+                if (state.isSignInSuccessful) {
                     val userData = googleAuthUiClient.getSignedInUser()
                     viewModel.addUserByEmail(
                         AddUserByEmail(
@@ -127,20 +128,23 @@ fun NutriMateApp(
                             name = userData.username!!
                         )
                     )
-                    Log.d(TAG, "ADD NEW ACOUNT DONE")
-                    if (userData.email != null){
+                    Log.d(TAG, "ADD NEW ACCOUNT DONE")
+                    if (userData.email != null) {
                         viewModel.stateIsUserPreferencesFilled.collectAsState().value.let { state ->
-                            when(state){
-                                is Resource.Loading ->{
+                            when (state) {
+                                is Resource.Loading -> {
                                     viewModel.checkIsUserPreferencesFilled(userData?.email)
+                                    Log.d(TAG, "is Loading..")
                                 }
                                 is Resource.Success -> {
-                                    LaunchedEffect(Unit){
+                                    LaunchedEffect(Unit) {
                                         successAddState.show()
                                         delay(500)
                                         successAddState.finish()
-                                        if (state.data == true) { // Periksa hasil sebenarnya (state.data)
+                                        if (state.data == true) {
+                                            Log.e(TAG, "First Going to home")
                                             navController.navigate(Screen.Home.route)
+                                            viewModel.resetState()
                                         } else {
                                             navController.navigate(Screen.UserPreferences.route)
                                         }
@@ -148,52 +152,151 @@ fun NutriMateApp(
                                 }
                                 is Resource.Error -> {
                                     failedAddState.show()
-                                    LaunchedEffect(Unit){
+                                    LaunchedEffect(Unit) {
                                         delay(2000)
                                         failedAddState.finish()
                                     }
-//                                    navController.navigate(Screen.Home.route)
                                 }
-                                else->{}
+                                else -> {
+                                }
+                            }
+                        }
+                    }
+                } else if (googleAuthUiClient.getSignedInUser() != null) {
+                    val userData = googleAuthUiClient.getSignedInUser()
+                    Log.d(TAG, "GET INTO IF ELSE")
+                    if (userData?.email != null) {
+                        viewModel.stateIsUserPreferencesFilled.collectAsState().value.let { state ->
+                            when (state) {
+                                is Resource.Loading -> {
+                                    // viewModel.checkIsUserPreferencesFilled(userData?.email)
+                                }
+                                is Resource.Success -> {
+                                    LaunchedEffect(Unit) {
+                                        successAddState.show()
+                                        delay(500)
+                                        successAddState.finish()
+                                        if (state.data == true) {
+                                            Log.e(TAG, "Second Going to home")
+                                            navController.navigate(Screen.Home.route)
+                                            viewModel.resetState()
+                                        } else {
+                                            navController.navigate(Screen.UserPreferences.route)
+                                            viewModel.resetState()
+                                        }
+                                    }
+                                }
+                                is Resource.Error -> {
+                                    failedAddState.show()
+                                    LaunchedEffect(Unit) {
+                                        delay(2000)
+                                        failedAddState.finish()
+                                    }
+                                }
+                                else -> {
+                                }
                             }
                         }
                     }
                 }
 
-                else if(googleAuthUiClient.getSignedInUser() != null) {
-                    val userData = googleAuthUiClient.getSignedInUser()
-                    Log.d(TAG, "GET INTO IF ELSE")
-                    if (userData?.email != null){
-                        viewModel.stateIsUserPreferencesFilled.collectAsState().value.let { state ->
-                            when(state){
-                                is Resource.Loading ->{
-                                    viewModel.checkIsUserPreferencesFilled(userData?.email)
-                                }
-                                is Resource.Success -> {
-                                    LaunchedEffect(Unit){
-                                        successAddState.show()
-                                        delay(500)
-                                        successAddState.finish()
-                                        if (state.data == true) { // Periksa hasil sebenarnya (state.data)
-                                            navController.navigate(Screen.Home.route)
-                                        } else {
-                                            navController.navigate(Screen.UserPreferences.route)
-                                        }
-                                    }
-                                }
-                                is Resource.Error -> {
-                                    failedAddState.show()
-                                    LaunchedEffect(Unit){
-                                        delay(2000)
-                                        failedAddState.finish()
-                                    }
-//                                    navController.navigate(Screen.Home.route)
-                                }
-                                else->{}
-                            }
-                        }
-                    }
-                }
+//                if (state.isSignInSuccessful) {
+//                    val userData = googleAuthUiClient.getSignedInUser()
+//                    viewModel.addUserByEmail(
+//                        AddUserByEmail(
+//                            email = userData?.email!!,
+//                            name = userData.username!!
+//                        )
+//                    )
+//                    viewModel.stateAddUser.collectAsState().value.let { state ->
+//                        when (state) {
+//                            is Resource.Loading -> {
+//
+//                            }
+//
+//                            is Resource.Success -> {
+//                                navController.navigate(Screen.UserPreferences.route)
+//                            }
+//
+//                            is Resource.Error -> {
+//                                // akun sudah ada maka create
+////                                navController.navigate(Screen.Home.route)
+//                            }
+//
+//                            else -> {}
+//                        }
+//                    }
+//                }
+//                    Log.d(TAG, "ADD NEW ACCOUNT DONE")
+//                    if (userData.email != null) {
+//                        viewModel.stateIsUserPreferencesFilled.collectAsState().value.let { state ->
+//                            when (state) {
+//                                is Resource.Loading -> {
+//                                    viewModel.checkIsUserPreferencesFilled(userData?.email)
+//                                    Log.d(TAG, "is Loading..")
+//                                }
+//                                is Resource.Success -> {
+//                                    LaunchedEffect(Unit) {
+//                                        successAddState.show()
+//                                        delay(500)
+//                                        successAddState.finish()
+//                                        if (state.data == true) {
+//                                            Log.e(TAG, "First Going to home")
+//                                            navController.navigate(Screen.Home.route)
+//                                        } else {
+//                                            navController.navigate(Screen.UserPreferences.route)
+//                                        }
+//                                    }
+//                                }
+//                                is Resource.Error -> {
+//                                    failedAddState.show()
+//                                    LaunchedEffect(Unit) {
+//                                        delay(2000)
+//                                        failedAddState.finish()
+//                                    }
+//                                }
+//                                else -> {
+//                                }
+//                            }
+//                        }
+//                    }
+//                } else if (googleAuthUiClient.getSignedInUser() != null) {
+//                    val userData = googleAuthUiClient.getSignedInUser()
+//                    Log.d(TAG, "GET INTO IF ELSE")
+//                    if (userData?.email != null) {
+//                        viewModel.stateIsUserPreferencesFilled.collectAsState().value.let { state ->
+//                            when (state) {
+//                                is Resource.Loading -> {
+//                                    // viewModel.checkIsUserPreferencesFilled(userData?.email)
+//                                }
+//                                is Resource.Success -> {
+//                                    LaunchedEffect(Unit) {
+//                                        successAddState.show()
+//                                        delay(500)
+//                                        successAddState.finish()
+//                                        if (state.data == true) {
+//                                            Log.e(TAG, "Second Going to home")
+//                                            navController.navigate(Screen.Home.route)
+//                                        } else {
+//                                            navController.navigate(Screen.UserPreferences.route)
+//                                        }
+//                                    }
+//                                }
+//                                is Resource.Error -> {
+//                                    failedAddState.show()
+//                                    LaunchedEffect(Unit) {
+//                                        delay(2000)
+//                                        failedAddState.finish()
+//                                    }
+//                                }
+//                                else -> {
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+
+
 
                 // activity result after user selecting the gmail user profile
                 val launcher = rememberLauncherForActivityResult(
@@ -276,6 +379,7 @@ fun NutriMateApp(
             }
             composable(Screen.UserPreferences.route){
                 UserPreferenceScreen(
+                    googleAuthUiClient = googleAuthUiClient,
                     userData = googleAuthUiClient.getSignedInUser(),
                     navController = navController
                 )
