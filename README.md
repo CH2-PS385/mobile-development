@@ -1,6 +1,8 @@
+<img src="https://github.com/CH2-PS385/mobile-development/blob/cf57b7fa5a31796ac84fb5a575dc42931433d94b/assets_readme/logo.png" width="100" height="100" align="right" />
+
 # NutriMate Android App
 Capstone Product Bangkit Academy Batch 2 2023
-
+![NutriMate App](https://github.com/CH2-PS385/mobile-development/blob/cf57b7fa5a31796ac84fb5a575dc42931433d94b/assets_readme/mock_up.png)
 
 # About NutriMate
 NutriMate is An application that can help user in determining their daily calorie intake and provide recommendations on foods that should be consumed to meet their daily calorie needs.
