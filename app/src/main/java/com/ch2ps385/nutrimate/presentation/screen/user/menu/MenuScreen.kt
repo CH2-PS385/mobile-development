@@ -2,27 +2,19 @@ package com.ch2ps385.nutrimate.presentation.screen.user.menu
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,25 +27,17 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import com.ch2ps385.nutrimate.R
 import com.ch2ps385.nutrimate.common.Resource
-import com.ch2ps385.nutrimate.presentation.ui.component.other.SearchBar
-import com.ch2ps385.nutrimate.data.remote.responses.Data
 import com.ch2ps385.nutrimate.data.remote.responses.DataItem
 import com.ch2ps385.nutrimate.di.Injection
 import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
 import com.ch2ps385.nutrimate.presentation.ui.component.carditem.CardMenuItemGrid
-import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
-import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
-import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor4
-import com.ch2ps385.nutrimate.R
 import com.ch2ps385.nutrimate.presentation.ui.component.other.CircularProgressAnimated
-import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
+import com.ch2ps385.nutrimate.presentation.ui.component.other.SearchBar
+import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor4
 
 
 @Composable

@@ -7,7 +7,6 @@ import com.ch2ps385.nutrimate.common.Resource
 import com.ch2ps385.nutrimate.data.remote.SignInResult
 import com.ch2ps385.nutrimate.data.remote.model.AddUserByEmail
 import com.ch2ps385.nutrimate.data.remote.responses.AddUserByEmailResponse
-import com.ch2ps385.nutrimate.data.remote.responses.User
 import com.ch2ps385.nutrimate.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +18,6 @@ class SignInViewModel(private val repository : UserRepository): ViewModel() {
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
-//
     private val _stateAddUser: MutableStateFlow<Resource<AddUserByEmailResponse>> =
         MutableStateFlow(Resource.Loading())
 
@@ -44,12 +42,10 @@ class SignInViewModel(private val repository : UserRepository): ViewModel() {
             try {
                 _stateAddUser.value = Resource.Loading()
 
-                // Log before making the API call
                 Log.d("UserPreferencesViewModel", "Adding user by email: $addUserByEmail")
 
                 val result = repository.addUserByEmail(addUserByEmail)
 
-                // Log the API call result
                 Log.d("UserPreferencesViewModel", "API Response: $result")
 
                 if (result is Resource.Success) {
@@ -57,12 +53,10 @@ class SignInViewModel(private val repository : UserRepository): ViewModel() {
                     _stateAddUser.value = Resource.Success(addUserResponse)
                 } else if (result is Resource.Error) {
                     _stateAddUser.value = Resource.Error(result.message!!)
-                    // Log the error message
                     Log.e("UserPreferencesViewModel", "Error adding user by email: ${result.message}")
                 }
             } catch (e: Exception) {
                 _stateAddUser.value = Resource.Error("An unknown error occurred")
-                // Log the exception
                 Log.e("UserPreferencesViewModel", "Exception adding user by email", e)
             }
         }
@@ -77,7 +71,6 @@ class SignInViewModel(private val repository : UserRepository): ViewModel() {
                 Log.d("UserPreferencesViewModel", "[ _isFilled: ${_stateIsUserPreferencesFilled.value} ]")
             } catch (e: Exception) {
                 _stateIsUserPreferencesFilled.value = Resource.Error("An unknown error occurred")
-                // Handle errors, e.g., show an error message
                 Log.e("UserPreferencesViewModel", "Exception check user preferences", e)
             }
         }

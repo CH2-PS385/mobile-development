@@ -1,6 +1,5 @@
 package com.ch2ps385.nutrimate.presentation.screen.onboarding
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

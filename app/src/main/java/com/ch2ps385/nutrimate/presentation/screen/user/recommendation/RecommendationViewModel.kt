@@ -21,7 +21,6 @@ class RecommendationViewModel(private val repository: UserRepository): ViewModel
         MutableStateFlow(Resource.Initial())
 
     val stateRecommendationMeal: StateFlow<Resource<AddMealPlannerResponse>> get() = _stateRecommendationMeal
-    // Pada RecommendationViewModel
     fun addMealPlanner(addMealPlanner: AddMealPlanner){
         viewModelScope.launch {
             _stateRecommendationMeal.value = Resource.Loading()
@@ -52,7 +51,6 @@ class RecommendationViewModel(private val repository: UserRepository): ViewModel
         }
     }
 
-    // Menggunakan State bukan mutableStateOf untuk isDialogShown
     private val _isDialogShown = mutableStateOf(false)
     val isDialogShown: State<Boolean> get() = _isDialogShown
 
@@ -63,7 +61,6 @@ class RecommendationViewModel(private val repository: UserRepository): ViewModel
     fun onDismissLoadingDialog(){
         _isDialogLoadingShown.value = false
     }
-    // Mengganti nilai properti isDialogShown
     fun onGenerateClick() {
         _isDialogShown.value = true
         _isDialogLoadingShown.value = true

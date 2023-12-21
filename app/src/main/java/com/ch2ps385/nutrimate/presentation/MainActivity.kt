@@ -6,21 +6,26 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
-import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
 import com.ch2ps385.nutrimate.NutriMateApp
+import com.ch2ps385.nutrimate.presentation.screen.auth.signin.GoogleAuthUiClient
 import com.ch2ps385.nutrimate.presentation.ui.MainViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
+import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
+import com.google.android.gms.auth.api.identity.Identity
 
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModels<MainViewModel>()
+
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            context = applicationContext,
+            oneTapClient = Identity.getSignInClient(applicationContext)
+        )
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,15 +36,14 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             NutriMateTheme {
-                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    NutriMateApp()
-//                }
                 val navController = rememberNavController()
-                NutriMateApp(navController=navController)
+                val startDestination = if (googleAuthUiClient.getSignedInUser() != null) {
+                    Screen.Home.route
+                } else {
+                    Screen.WelcomeScreen.route
+                }
+
+                NutriMateApp(navController = navController, startDestination = startDestination)
             }
         }
     }

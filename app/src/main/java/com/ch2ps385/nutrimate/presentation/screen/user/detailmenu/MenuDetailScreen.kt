@@ -2,10 +2,6 @@ package com.ch2ps385.nutrimate.presentation.screen.user.detailmenu
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -96,7 +90,6 @@ fun DetailContent(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-//            .fillMaxWidth()
             .fillMaxSize()
             .background(color = solidWhite)
     ) {
@@ -121,13 +114,13 @@ fun DetailContent(
                     .width(240.dp)
                     .height(40.dp)
                     .border(BorderStroke(2.dp, color = pSmashedPumpkin), shape = Shapes.medium)
-                    .align(Alignment.BottomCenter), // Align to the bottom
+                    .align(Alignment.BottomCenter),
                 shape = Shapes.medium,
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(8.dp), // Sesuaikan padding sesuai kebutuhan
+                        .padding(8.dp), 
                 ) {
                     Text(
                         text = data.namaMakananClean,

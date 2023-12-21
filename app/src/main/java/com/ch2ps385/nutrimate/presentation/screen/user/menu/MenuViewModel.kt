@@ -5,13 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ch2ps385.nutrimate.common.Resource
-import com.ch2ps385.nutrimate.data.remote.responses.Data
 import com.ch2ps385.nutrimate.data.remote.responses.DataItem
 import com.ch2ps385.nutrimate.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class MenuViewModel(private val repository: UserRepository) : ViewModel() {
 
@@ -34,10 +32,6 @@ class MenuViewModel(private val repository: UserRepository) : ViewModel() {
     private val _query = mutableStateOf("")
     val query : State<String> get() = _query
 
-//    fun search(newQuery : String){
-//        _query.value = newQuery
-//        getAllMenu()
-//    }
 
     fun search(newQuery: String) {
         _query.value = newQuery

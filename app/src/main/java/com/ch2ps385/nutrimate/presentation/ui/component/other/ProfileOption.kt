@@ -1,7 +1,5 @@
 package com.ch2ps385.nutrimate.presentation.ui.component.other
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,13 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ch2ps385.nutrimate.R
 import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
-import androidx.compose.material3.*
-import androidx.compose.ui.graphics.painter.Painter
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 
 

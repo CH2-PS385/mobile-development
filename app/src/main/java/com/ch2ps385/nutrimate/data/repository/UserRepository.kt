@@ -1,6 +1,6 @@
 package com.ch2ps385.nutrimate.data.repository
 
-import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -35,7 +35,7 @@ class UserRepository private constructor(private val api : ApiService) {
         } catch (e : Exception){
             return Resource.Error("An unknown error occured")
         }
-        Log.d(ContentValues.TAG, "API Response: $response")
+        Log.d(TAG, "API Response: $response")
         return Resource.Success(response)
     }
 
@@ -49,17 +49,17 @@ class UserRepository private constructor(private val api : ApiService) {
         } catch (e : Exception){
             return Resource.Error("[ Repository ] Get Today Menu:${e.message}")
         }
-        Log.d(ContentValues.TAG, "API Response: $response")
+        Log.d(TAG, "API Response: $response")
         return Resource.Success(response)
     }
 
     suspend fun getMenuById(foodId : String): Data{
         try {
             val response = api.getMenuById(foodId)
-            Log.d(ContentValues.TAG, "API Response: $response")
+            Log.d(TAG, "API Response: $response")
             return response.data
         } catch (e: Exception) {
-            Log.e(ContentValues.TAG, "Error fetching menu by ID: ${e.message}")
+            Log.e(TAG, "Error fetching menu by ID: ${e.message}")
             throw e
         }
     }
@@ -68,7 +68,7 @@ class UserRepository private constructor(private val api : ApiService) {
     suspend fun addUserByEmail(addUserByEmail: AddUserByEmail): Resource<AddUserByEmailResponse> {
         try {
             val response = api.addUserByEmail(addUserByEmail)
-            Log.d(ContentValues.TAG, "AddUserByEmailResponse: $response")
+            Log.d(TAG, "AddUserByEmailResponse: $response")
             return Resource.Success(response)
         } catch (e: Exception) {
             return Resource.Error("An unknown error occurred")
@@ -78,7 +78,7 @@ class UserRepository private constructor(private val api : ApiService) {
     suspend fun addUserPreferences(addUserPreferences: AddUserPreferences): Resource<AddUserPreferencesResponse>{
         try {
             val response = api.addUserPreferences(addUserPreferences)
-            Log.d(ContentValues.TAG, "API Response Add User Preferences: $response")
+            Log.d(TAG, "API Response Add User Preferences: $response")
             return Resource.Success(response)
         } catch (e: Exception) {
             return Resource.Error("[ Repository ] AddUserPreferencse:${e.message}")
@@ -88,7 +88,8 @@ class UserRepository private constructor(private val api : ApiService) {
     suspend fun addAllergies(addAllergies: AddAllergies) : Resource<AddAllergiesResponse>{
         try {
             val response = api.addUserAllergies(addAllergies)
-            Log.d(ContentValues.TAG, "API Response Add User Allergies: $response")
+            Log.d(TAG, "Allergies Repository: $addAllergies")
+            Log.d(TAG, "API Response Add User Allergies: $response")
             return Resource.Success(response)
         } catch (e: Exception) {
             return Resource.Error("[ Repository ] AddUserAllergies:${e.message}")
@@ -101,10 +102,10 @@ class UserRepository private constructor(private val api : ApiService) {
             Log.d("UserRepository", "Before calling api.addMealPlanner")
             val response = api.addMealPlanner(addMealPlanner)
             Log.d("UserRepository", "After calling api.addMealPlanner")
-            Log.d(ContentValues.TAG, "API Response: $response")
+            Log.d(TAG, "API Response: $response")
             return Resource.Success(response)
         }catch (e: Exception) {
-            Log.e(ContentValues.TAG, "Error in addMealPlanner: ${e.message}")
+            Log.e(TAG, "Error in addMealPlanner: ${e.message}")
             return Resource.Error("[ Repository ] AddMealPlanner:${e.message}")
         }
     }
@@ -114,10 +115,10 @@ class UserRepository private constructor(private val api : ApiService) {
             Log.d("UserRepository", "Before calling api.addMealPlanner")
             val response = api.addWaterIntake(addWaterIntake)
             Log.d("UserRepository", "After calling api.addMealPlanner")
-            Log.d(ContentValues.TAG, "API Response: $response")
+            Log.d(TAG, "API Response: $response")
             return Resource.Success(response)
         }catch (e: Exception) {
-            Log.e(ContentValues.TAG, "Error in addMealPlanner: ${e.message}")
+            Log.e(TAG, "Error in addMealPlanner: ${e.message}")
             return Resource.Error("[ Repository ] AddMealPlanner:${e.message}")
         }
     }
@@ -137,10 +138,10 @@ class UserRepository private constructor(private val api : ApiService) {
                 yy = yyyy
             )
             Log.d("UserRepository", "After calling api.getWaterIntake")
-            Log.e(ContentValues.TAG, "API Response GetWaterIntakeResponse: $response")
+            Log.e(TAG, "API Response GetWaterIntakeResponse: $response")
             return Resource.Success(response)
         } catch (e: Exception) {
-            Log.e(ContentValues.TAG, "Error in getWaterIntake: ${e.message}")
+            Log.e(TAG, "Error in getWaterIntake: ${e.message}")
             return Resource.Error("[ Repository ] getWaterIntake:${e.message}")
         }
     }
@@ -156,10 +157,10 @@ class UserRepository private constructor(private val api : ApiService) {
                 yy = getMealPlanner.yy
             )
             Log.d("UserRepository", "After calling api.getMealPlanner")
-            Log.e(ContentValues.TAG, "API Response GetMealPlannerResponse: $response")
+            Log.e(TAG, "API Response GetMealPlannerResponse: $response")
             return Resource.Success(response)
         } catch (e: Exception) {
-            Log.e(ContentValues.TAG, "Error in getMealPlanner: ${e.message}")
+            Log.e(TAG, "Error in getMealPlanner: ${e.message}")
             return Resource.Error("[ Repository ] getMealPlanner:${e.message}")
         }
     }
@@ -169,10 +170,10 @@ class UserRepository private constructor(private val api : ApiService) {
     suspend fun getDataUser(email : String): DataGetUser{
         try {
             val response = api.getUserByEmail(email)
-            Log.d(ContentValues.TAG, "API Response: $response")
+            Log.d(TAG, "API Response: $response")
             return response.data
         } catch (e: Exception) {
-            Log.e(ContentValues.TAG, "Error fetching user by ID: ${e.message}")
+            Log.e(TAG, "Error fetching user by ID: ${e.message}")
             throw e
         }
     }

@@ -58,7 +58,6 @@ import com.ch2ps385.nutrimate.presentation.ui.component.textfields.TextFieldsPre
 import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
-import com.google.android.gms.auth.api.identity.Identity
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.state.StateDialog
 import com.maxkeppeler.sheets.state.models.State
@@ -71,7 +70,7 @@ import kotlinx.coroutines.launch
 fun UserPreferenceScreen(
     googleAuthUiClient:GoogleAuthUiClient,
     userData : UserData?,
-    navController: NavController, // Added callback for navigation to home
+    navController: NavController,
     viewModel : UserPreferencesViewModel = viewModel(
         factory = UserViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
@@ -82,20 +81,16 @@ fun UserPreferenceScreen(
 
     BackHandler {
         if (userData != null) {
-            // Jika pengguna telah masuk, lakukan proses sign-out
             coroutineScope.launch {
                 googleAuthUiClient.signOut()
 
-                // Navigasikan ke halaman login
                 navController.navigate(Screen.SignIn.route) {
-                    // Hindari kembali ke UserPreferencesScreen setelah sign-out
                     popUpTo(Screen.SignIn.route) {
                         inclusive = true
                     }
                 }
             }
         } else {
-            // Jika pengguna belum masuk, kembali biasa
             navController.popBackStack()
         }
     }
@@ -274,7 +269,6 @@ fun UserPreferenceScreen(
                         viewModel.foodPreferences.value[index]
                     }
 
-                    // Use the collected data as needed, for example, pass it to your ViewModel function
                     viewModel.addUserPreferences(
                         AddUserPreferences(
                             email = userData?.email!!,
@@ -310,56 +304,6 @@ fun UserPreferenceScreen(
                 style = MaterialTheme.typography.displayMedium
             )
         }
-
-//        Button(
-//            onClick = {
-//                val height = viewModel.height.value
-//                val weight = viewModel.weight.value
-//                val age = viewModel.age.value
-//                val gender = if (viewModel.gender.value == Constants.Gender.Male) "m" else "f"
-//                val allergies = foodItems.filterIndexed { index, _ ->
-//                    viewModel.foodPreferences.value[index]
-//                }
-//
-//
-//                Log.d("UserPreferenceScreen", "Height: $height, Weight: $weight, Age: $age, Gender: $gender, Allergies: $allergies")
-//                // Use the collected data as needed, for example, pass it to your ViewModel function
-//                viewModel.addUserPreferences(
-//                    AddUserPreferences(
-//                        email = userData?.email!!,
-//                        height = height.toInt(),
-//                        weight = weight.toInt(),
-//                        age = age.toInt(),
-//                        gender = gender,
-//                    )
-//                )
-//                viewModel.addAllergies(
-//                    AddAllergies(
-//                        email = userData?.email!!,
-//                        allergies = allergies
-//                    )
-//                )
-//                viewModel.onSavePreferencesClick()
-//
-//
-//            },
-//            colors = ButtonDefaults.buttonColors(containerColor = pSinopia),
-//            modifier = modifier
-//                .width(312.dp)
-//                .height(40.dp),
-//
-//        ) {
-//            Image(
-//                painterResource(id = R.drawable.ic_save),
-//                contentDescription = "Cart button icon",
-//                modifier = Modifier.size(20.dp)
-//            )
-//            Text(
-//                text = "Done",
-//                Modifier.padding(start = 10.dp),
-//                style = MaterialTheme.typography.displayMedium
-//            )
-//        }
     }
 }
 
