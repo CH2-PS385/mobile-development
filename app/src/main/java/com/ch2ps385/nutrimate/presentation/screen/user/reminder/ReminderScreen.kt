@@ -83,55 +83,6 @@ import java.time.LocalDate
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
-//
-//private lateinit var workManager: WorkManager
-//private lateinit var periodicWorkRequest: PeriodicWorkRequest
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Composable
-//fun ReminderScreen(
-//    modifier: Modifier = Modifier
-//) {
-//    val lifecycleOwner = LocalLifecycleOwner.current
-//    val applicationContext = LocalContext.current
-//    var isPermissionGranted by remember { mutableStateOf(false) }
-//
-//    // Request notification permissions
-//    val requestPermissionLauncher =
-//        rememberLauncherForActivityResult(
-//            ActivityResultContracts.RequestPermission()
-//        ) { isGranted: Boolean ->
-//            if (isGranted) {
-//                isPermissionGranted = true
-//                Log.d("ReminderScreen", "Notifications permission granted")
-//            } else {
-//                Log.d("ReminderScreen", "Notifications will not show without permission")
-//            }
-//        }
-//
-//    LaunchedEffect(key1 = Unit) {
-//        // Request notification permissions if not granted
-//        if (isPermissionGranted) {
-//            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-//        }
-//
-//        periodicWorkRequest = PeriodicWorkRequest.Builder(
-//            ReminderNotificationWorker::class.java,
-//            repeatInterval = 15,
-//            repeatIntervalTimeUnit = TimeUnit.MINUTES// Delay to start at the next 6 AM
-//        ).build()
-//
-//
-//        val workManager = WorkManager.getInstance(applicationContext)
-//        workManager.enqueue(periodicWorkRequest)
-//
-//        workManager.getWorkInfoByIdLiveData(periodicWorkRequest.id)
-//            .observe(lifecycleOwner){ workInfo ->
-//                Log.d("ReminderScreen", "Message: ${workInfo.state}")
-//            }
-//    }
-//    Text(text = "Reminder")
-//}
-
 
 private lateinit var workManager: WorkManager
 private lateinit var periodicWorkRequest: PeriodicWorkRequest
@@ -165,7 +116,6 @@ fun ReminderScreen(
         config = StateConfig(state = failedConfigState),
     )
 
-    // Request notification permissions
     val requestPermissionLauncher =
         rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -200,7 +150,6 @@ fun ReminderScreen(
 
 
     LaunchedEffect(key1 = Unit) {
-        // Request notification permissions if not granted
         if (isPermissionGranted) {
             requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -211,7 +160,6 @@ fun ReminderScreen(
         if (currentHour in startHour..endHour) {
             calendar.set(Calendar.HOUR_OF_DAY, startHour)
 
-            // If the current time is already past 6 AM, set the initial delay for the next day
             if (System.currentTimeMillis() > calendar.timeInMillis) {
                 calendar.add(Calendar.DAY_OF_YEAR, 1)
             }
@@ -238,7 +186,6 @@ fun ReminderScreen(
         }
     }
 
-// Deklarasikan isSuccessStateVisible sebagai mutable state
     var isSuccessStateVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = viewModel){
@@ -501,14 +448,12 @@ fun ReminderContent(
                     }
                 }
                 val selectedValues = remember { mutableStateOf<List<Int>>(emptyList()) }
-                // Tombol "Add" yang diaktifkan/dinonaktifkan berdasarkan pemilihan pengguna
                 Button(
                     onClick = {
-                        // Tambahkan nilai yang dipilih ke dalam daftar
                         if (selectedButtonIndex != -1) {
                             val selectedWaterIntake = mlValues[selectedButtonIndex]
                             selectedValues.value = selectedValues.value + selectedWaterIntake
-                            selectedButtonIndex = -1 // Reset pemilihan
+                            selectedButtonIndex = -1 
 
 
                             val currentDate = LocalDate.now()

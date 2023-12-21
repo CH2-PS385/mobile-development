@@ -1,7 +1,5 @@
 package com.ch2ps385.nutrimate.presentation.screen.profile.profile
 
-import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,7 +38,6 @@ import com.ch2ps385.nutrimate.data.remote.responses.DataGetUser
 import com.ch2ps385.nutrimate.di.Injection
 import com.ch2ps385.nutrimate.presentation.screen.auth.signin.GoogleAuthUiClient
 import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
-import com.ch2ps385.nutrimate.presentation.screen.user.detailmenu.MenuDetailViewModel
 import com.ch2ps385.nutrimate.presentation.screen.user.detailmenu.VerticalDivider
 import com.ch2ps385.nutrimate.presentation.ui.component.other.CircularProgressAnimated
 import com.ch2ps385.nutrimate.presentation.ui.component.other.ProfileOption
@@ -68,13 +65,6 @@ fun ProfileScreen(
     ),
 ){
     val coroutineScope = rememberCoroutineScope()
-//    val applicationContext = LocalContext.current
-//    val googleAuthUiClient by lazy {
-//        GoogleAuthUiClient(
-//            context = applicationContext,
-//            oneTapClient = Identity.getSignInClient(applicationContext)
-//        )
-//    }
 
         viewModel.stateGetDataPreference.collectAsState(initial = Resource.Loading()).value.let {state ->
             when(state){
@@ -95,165 +85,6 @@ fun ProfileScreen(
                 else -> {}
             }
         }
-//
-//    Column(
-//        verticalArrangement = Arrangement.Top,
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        modifier = modifier
-//            .fillMaxSize()
-//    ) {
-//        Spacer(modifier = Modifier.height(24.dp))
-//        Text(
-//            text = stringResource(id = R.string.profile),
-//            style = MaterialTheme.typography.headlineSmall,
-//            color = neutralColor1,
-//            modifier = modifier
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-//        AsyncImage(
-//            model = userData?.profilePictureUrl,
-//            contentDescription = "Profile picture",
-//            modifier = Modifier
-//                .size(150.dp)
-//                .clip(CircleShape),
-//            contentScale = ContentScale.Crop
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Text(
-////            text = stringResource(id = R.string.name),
-//            text = userData?.username ?: stringResource(id = R.string.name),
-//            style = MaterialTheme.typography.headlineSmall,
-//            modifier = modifier
-//        )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        Text(
-////            text = stringResource(id = R.string.name),
-//            text = userData?.email ?: stringResource(id = R.string.name),
-//            style = MaterialTheme.typography.labelMedium,
-//            color = neutralColor3,
-//            modifier = modifier
-//        )
-//        Spacer(modifier = Modifier.height(24.dp))
-//        Row(
-//            modifier = modifier
-//                .heightIn(38.dp)
-//                .fillMaxWidth(),
-//            verticalAlignment = Alignment.CenterVertically,
-//            horizontalArrangement = Arrangement.Center,
-//        ){
-//            VerticalDivider()
-//            Column(
-//                verticalArrangement = Arrangement.Top,
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                modifier = modifier
-//                    .padding(horizontal = 16.dp)
-//                    .heightIn(40.dp)
-//                    .widthIn(48.dp)
-//            ) {
-//                Text(
-////                    text = stringResource(id = R.string.height_value, "175"),
-//                    text = .data?.height.toString(),
-//                    style = MaterialTheme.typography.titleMedium,
-//                    color = neutralColor1
-//                )
-//                Text(
-//                    text =  stringResource(R.string.height_title),
-//                    style = MaterialTheme.typography.labelSmall,
-//                    color = neutralColor4
-//                )
-//            }
-//            VerticalDivider()
-//            Column(
-//                verticalArrangement = Arrangement.Top,
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                modifier = modifier
-//                    .padding(horizontal = 16.dp)
-//                    .heightIn(40.dp)
-//                    .widthIn(48.dp)
-//            ) {
-//                Text(
-////                    text = stringResource(R.string.weight_value, "67"),
-//                    text = getDataPreference.data?.weight.toString(),
-//                    style = MaterialTheme.typography.titleMedium,
-//                    color = neutralColor1
-//                )
-//                Text(
-//                    text =  stringResource(R.string.weight_title),
-//                    style = MaterialTheme.typography.labelSmall,
-//                    color = neutralColor4
-//                )
-//            }
-//            VerticalDivider()
-//            Column(
-//                verticalArrangement = Arrangement.Top,
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                modifier = modifier
-//                    .padding(horizontal = 16.dp)
-//                    .heightIn(40.dp)
-//                    .widthIn(48.dp)
-//            ) {
-//                Text(
-////                    text = stringResource(R.string.age_value, "27"),
-//                    text = getDataPreference.data?.age.toString(),
-//                    style = MaterialTheme.typography.titleMedium,
-//                    color = neutralColor1
-//                )
-//                Text(
-//                    text =  stringResource(R.string.age_title),
-//                    style = MaterialTheme.typography.labelSmall,
-//                    color = neutralColor4
-//                )
-//            }
-//            VerticalDivider()
-//        }
-//        Spacer(modifier = Modifier.height(24.dp))
-//        Column(
-//
-//        ){
-////            ProfileOption(
-////                icon = painterResource(id = R.drawable.baseline_person_24),
-////                text = stringResource(id = R.string.personal_data),
-////                onClick = {
-////                    navController.navigate(Screen.ProfileDetail.route)
-////                }
-////            )
-////            Spacer(modifier = Modifier.height(16.dp))
-//            ProfileOption(
-//                icon = painterResource(id = R.drawable.baseline_settings_24),
-//                text = stringResource(id = R.string.change_preferences),
-//                onClick = {
-//                    navController.navigate(Screen.ProfileDetail.route)
-//                }
-//            )
-//            Spacer(modifier = Modifier.height(16.dp))
-//            ProfileOption(
-//                icon = painterResource(id = R.drawable.baseline_info_24),
-//                text = stringResource(id = R.string.about),
-//                onClick = {
-//                    navController.navigate(Screen.About.route)
-//                }
-//            )
-//            Spacer(modifier = Modifier.height(16.dp))
-//            ProfileOption(
-//                icon = painterResource(id = R.drawable.baseline_logout_24),
-//                text = stringResource(id = R.string.sign_out),
-//                onClick = {
-//                        coroutineScope.launch {
-//                            googleAuthUiClient.signOut()
-//                            Toast.makeText(
-//                                applicationContext,
-//                                "Signed out",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-////                            navController.popBackStack(Screen.SignIn.route, true)
-//                            navController.popBackStack()
-////                            navController.navigate(Screen.SignIn.route)
-//                        }
-//                }
-//            )
-//
-//        }
-//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -304,14 +135,12 @@ fun ProfileContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-//            text = stringResource(id = R.string.name),
             text = userData?.username ?: stringResource(id = R.string.name),
             style = MaterialTheme.typography.headlineSmall,
             modifier = modifier
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-//            text = stringResource(id = R.string.name),
             text = userData?.email ?: stringResource(id = R.string.name),
             style = MaterialTheme.typography.labelMedium,
             color = neutralColor3,
@@ -335,7 +164,6 @@ fun ProfileContent(
                     .widthIn(48.dp)
             ) {
                 Text(
-//                    text = stringResource(id = R.string.height_value, "175"),
                     text = prefData.height.toString(),
                 style = MaterialTheme.typography.titleMedium,
                 color = neutralColor1
@@ -356,7 +184,6 @@ fun ProfileContent(
                     .widthIn(48.dp)
             ) {
                 Text(
-//                    text = stringResource(R.string.weight_value, "67"),
                     text = prefData.weight.toString(),
                     style = MaterialTheme.typography.titleMedium,
                     color = neutralColor1
@@ -377,7 +204,6 @@ fun ProfileContent(
                     .widthIn(48.dp)
             ) {
                 Text(
-//                    text = stringResource(R.string.age_value, "27"),
                     text = prefData.age.toString(),
                     style = MaterialTheme.typography.titleMedium,
                     color = neutralColor1
@@ -394,14 +220,6 @@ fun ProfileContent(
         Column(
 
         ){
-//            ProfileOption(
-//                icon = painterResource(id = R.drawable.baseline_person_24),
-//                text = stringResource(id = R.string.personal_data),
-//                onClick = {
-//                    navController.navigate(Screen.ProfileDetail.route)
-//                }
-//            )
-//            Spacer(modifier = Modifier.height(16.dp))
             ProfileOption(
                 icon = painterResource(id = R.drawable.baseline_settings_24),
                 text = stringResource(id = R.string.change_preferences),

@@ -102,49 +102,30 @@ class EditUserPreferencesViewModel(private val repository: UserRepository): View
     }
 
     val gender = mutableStateOf(Constants.Gender.Male)
-//    fun setGender(newGender : Constants.Gender){
-//        gender.value = newGender
-//    }
 
     fun setGender(newGender: String?) {
         gender.value = when (newGender) {
             "m" -> Constants.Gender.Male
             "f" -> Constants.Gender.Female
-            else -> Constants.Gender.Male // Provide a default value or handle the case where it's neither "m" nor "f"
+            else -> Constants.Gender.Male 
         }
     }
 
     val foodPreferences = mutableStateOf(List(15) { false })
 
-
-    fun setFoodPreference(index: Int, isChecked: Boolean, email:String) {
+    fun setFoodPreference(index: Int, isChecked: Boolean, email: String) {
         foodPreferences.value = foodPreferences.value.toMutableList().also {
             it[index] = isChecked
-        }
-        viewModelScope.launch {
-            saveFoodPreferences(email)
-        }
-    }
-
-    suspend fun saveFoodPreferences(email: String) {
-        try {
-            val allergies = foodItems.filterIndexed { index, _ ->
-                foodPreferences.value[index]
-            }
-            val addAllergies = repository.addAllergies(AddAllergies(email, allergies))
-            _stateAllergies.value = Resource.Success(addAllergies.data!!)
-        } catch (e: Exception) {
-            _stateAllergies.value = Resource.Error("[ View Model ] saveFoodPreferences: ${e.message}")
         }
     }
 
     fun setFoodPreferenceGet(newAllergies: List<String>?) {
         newAllergies?.let { allergies ->
-            foodPreferences.value = foodPreferences.value.toMutableList().also {
-                for (allergy in allergies) {
-                    val index = Constants.foodItems.indexOf(allergy)
+            foodPreferences.value = MutableList(foodItems.size) { false }.apply {
+                allergies.forEach { allergy ->
+                    val index = foodItems.indexOf(allergy)
                     if (index != -1) {
-                        it[index] = true
+                        this[index] = true
                     }
                 }
             }

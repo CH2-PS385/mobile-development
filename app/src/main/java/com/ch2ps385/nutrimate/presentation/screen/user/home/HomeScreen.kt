@@ -144,7 +144,6 @@ fun HomeScreen(
             style = MaterialTheme.typography.labelMedium,
             color = neutralColor1,
         )
-//        MultipleStylesInText()
         HomeSection(
             title = "Menu of The Day",
             modifier = modifier.align(Alignment.Start)
@@ -155,7 +154,6 @@ fun HomeScreen(
             viewModel.stateDataItem.collectAsState(initial = Resource.Loading()).value.let { state ->
                 when(state){
                     is Resource.Loading -> {
-//                    CustomLinearProgressBar()
                         CircularProgressAnimated()
                     }
                     is Resource.Success -> {
@@ -170,65 +168,6 @@ fun HomeScreen(
                 }
             }
         }
-//        HomeSection(
-//            title = "Today's Plans",
-//            modifier = modifier.align(Alignment.Start)
-//        ) {
-////            LaunchedEffect(viewModel) {
-////                val currentDate = LocalDate.now()
-////                val dd: Int = currentDate.dayOfMonth
-////                val mm: Int = currentDate.monthValue
-////                val yyyy: Int =  currentDate.year
-////
-////                // Lakukan apa pun yang perlu Anda lakukan dengan nilai dd, mm, dan yy di sini
-////                Log.d(ContentValues.TAG, "dd: $dd, mm: $mm, yy: $yyyy")
-////                viewModel.getMealPlanner(
-////                    GetMealPlanner(
-////                        email = userData?.username.toString(),
-////                        dd = dd,
-////                        mm = mm,
-////                        yy =  yyyy
-////                    )
-////                )
-////            }
-//            val currentDate = LocalDate.now()
-//            val dd: Int = currentDate.dayOfMonth
-//            val mm: Int = currentDate.monthValue
-//            val yyyy: Int =  currentDate.year
-//
-//            // Lakukan apa pun yang perlu Anda lakukan dengan nilai dd, mm, dan yy di sini
-//            viewModel.stateGetDataMealPlanner.collectAsState(initial = Resource.Loading()).value.let { state ->
-//                when(state){
-//                    is Resource.Loading -> {
-////                    CustomLinearProgressBar()
-//                        CircularProgressAnimated()
-//                        Log.d(ContentValues.TAG, "dd: $dd, mm: $mm, yy: $yyyy")
-//                        viewModel.getMealPlanner(
-//                            GetMealPlanner(
-//                                email = userData?.email.toString(),
-//                                dd = dd,
-//                                mm = mm,
-//                                yy =  2024
-//                            )
-//                        )
-//                    }
-//                    is Resource.Success -> {
-//                        if (!state.data?.isEmpty!!){
-//                            state.data?.let {
-//                                state.data?.let { TodayPlanner(todayPlanner = it, navController = navController ) }
-//                            }
-//                        } else{
-//                            Text(text = "Meal Planner hari ini tidak tersedia!")
-//                        }
-//                    }
-//                    is Resource.Error -> {
-//                        Log.d(ContentValues.TAG, "Tidak dapat mmenampilkan data!")
-//                    }
-//                    else -> {}
-//                }
-//            }
-//        }
-//            }
 
         val currentDate = LocalDate.now()
         val dd: Int = currentDate.dayOfMonth
@@ -251,7 +190,7 @@ fun HomeScreen(
                 is Resource.Success -> {
                     if (!state.data?.isEmpty!!) {
                         HomeSection(
-                            title = "Todays menu",
+                            title = "Today's Meals",
                             modifier = modifier.align(Alignment.Start)
                         ) {
                             TodayPlanner(todayPlanner = state.data, navController = navController)
@@ -268,7 +207,7 @@ fun HomeScreen(
                                 is Resource.Success -> {
                                     state.data?.let {
                                         HomeSection(
-                                            title = "Our Recommendation",
+                                            title = "Culinary Day Highlights",
                                             modifier = modifier.align(Alignment.Start)
                                         ) {
                                             RecommendMenu(menuList = state.data, navController = navController)
@@ -306,7 +245,6 @@ fun MenuOfTheDayRow(
     val shuffledMenuList = remember { menuList.shuffled() }
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-//        contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier
     ){
         items(shuffledMenuList.take(5)) { menu ->
@@ -330,7 +268,6 @@ fun RecommendMenu(
     val shuffledMenuList = remember { menuList.shuffled() }
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-//        contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier
     ){
         items(shuffledMenuList.take(5)) { menu ->
@@ -353,7 +290,6 @@ fun TodayPlanner(
 ){
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-//        contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier
             .height(288.dp)
     ){
@@ -388,7 +324,6 @@ fun CardMenuItemGrid(
             .clip(Shapes.extraSmall)
             .height(230.dp)
             .width(175.dp)
-//            .shadow(elevation = 20.dp, shape = Shapes.small)
             .background(color = sBabyPink)
             .border(BorderStroke(1.dp, color = sBabyPink), Shapes.extraSmall)
     ) {
@@ -403,9 +338,6 @@ fun CardMenuItemGrid(
             Image(
                 painter = rememberAsyncImagePainter(
                     model = menu.imageUrl,
-//                        onLoading = {
-//                            CircularProgressAnimated()
-//                        }
                 ),
                 contentDescription = "image description",
                 contentScale = ContentScale.FillBounds,
@@ -418,7 +350,6 @@ fun CardMenuItemGrid(
                 modifier = modifier
                     .heightIn(32.dp)
                     .fillMaxWidth(),
-//                    .padding(end = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {

@@ -18,8 +18,9 @@ sealed class OnBoardingPage(
 
     object Second : OnBoardingPage(
         image = R.drawable.onboarding_healthyfood,
-        title = "Explore Nutritious Menus",
-        description = "Maintain your body's health by managing and tracking your daily water intake. The Water Intake feature helps you ensure your body stays hydrated at all times"
+        title = "Discover Culinary Delights",
+        description = "Embark on a gastronomic journey with our Explore Menu feature. Uncover a diverse range of nutritious and delicious dishes tailored to meet your dietary preferences, making every dining experience a delightful adventure"
+
     )
 
     object Third : OnBoardingPage(

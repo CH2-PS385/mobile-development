@@ -38,7 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ch2ps385.nutrimate.R
@@ -46,7 +45,6 @@ import com.ch2ps385.nutrimate.common.Constants
 import com.ch2ps385.nutrimate.common.Constants.foodItems
 import com.ch2ps385.nutrimate.common.Resource
 import com.ch2ps385.nutrimate.data.remote.UserData
-import com.ch2ps385.nutrimate.data.remote.model.AddAllergies
 import com.ch2ps385.nutrimate.data.remote.model.AddUserPreferences
 import com.ch2ps385.nutrimate.di.Injection
 import com.ch2ps385.nutrimate.presentation.screen.profile.editpreferences.EditUserPreferencesViewModel
@@ -55,7 +53,6 @@ import com.ch2ps385.nutrimate.presentation.ui.component.button.CustomCheckBoxBut
 import com.ch2ps385.nutrimate.presentation.ui.component.button.GenderButtonPackage
 import com.ch2ps385.nutrimate.presentation.ui.component.other.FetchLoading
 import com.ch2ps385.nutrimate.presentation.ui.component.textfields.TextFieldsPreferences
-import com.ch2ps385.nutrimate.presentation.ui.navigation.Screen
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
@@ -142,7 +139,6 @@ fun EditUserPreferencesScreen(
                 }
             }
             is Resource.Success -> {
-//                sucessAddState.show()
                 viewModel.age.value = state.data?.age.toString()
                 viewModel.height.value = state.data?.height.toString()
                 viewModel.weight.value = state.data?.weight.toString()
@@ -310,12 +306,6 @@ fun EditUserPreferencesContent(
                         weight = weight.toInt(),
                         age = age.toInt(),
                         gender = gender,
-                    )
-                )
-                viewModel.addAllergies(
-                    AddAllergies(
-                        email = email,
-                        allergies = allergies
                     )
                 )
                 viewModel.onSavePreferencesClick()

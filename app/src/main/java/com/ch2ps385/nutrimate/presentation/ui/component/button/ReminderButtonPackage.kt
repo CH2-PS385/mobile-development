@@ -14,11 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,10 +51,8 @@ fun ReminderButtonPackage(
 
     val mlValues = (100..550 step 50).toList()
 
-    // Menentukan apakah tombol "Add" dapat diaktifkan
     val isAddButtonEnabled = selectedButtonIndex != -1
 
-    // Daftar nilai yang telah dipilih
     val selectedValues = remember { mutableStateOf<List<Int>>(emptyList()) }
 
     Column(
@@ -117,10 +112,8 @@ fun ReminderButtonPackage(
             }
         }
 
-        // Tombol "Add" yang diaktifkan/dinonaktifkan berdasarkan pemilihan pengguna
         Button(
             onClick = {
-                // Tambahkan nilai yang dipilih ke dalam daftar
                 if (selectedButtonIndex != -1) {
                     val selectedWaterIntake = mlValues[selectedButtonIndex]
                     selectedValues.value = selectedValues.value + selectedWaterIntake
@@ -151,7 +144,6 @@ fun ReminderButtonPackage(
             )
         }
 
-        // Tampilkan nilai-nilai yang telah dipilih
         Text(
             text = "Selected Values: ${selectedValues.value.joinToString(", ")}",
             modifier = Modifier.padding(top = 16.dp)

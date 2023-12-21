@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,11 +36,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ch2ps385.nutrimate.R
-import com.ch2ps385.nutrimate.di.Injection
-import com.ch2ps385.nutrimate.presentation.screen.user.UserViewModelFactory
-import com.ch2ps385.nutrimate.presentation.screen.user.home.HomeViewModel
 import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1
@@ -60,7 +55,6 @@ fun SignInScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Solid Pumpkin color at the bottom
         Surface(
             color = pSmashedPumpkin,
             modifier = Modifier
@@ -75,16 +69,14 @@ fun SignInScreen(
             )
         }
 
-        // White Surface on top
         Surface(
             color = solidWhite,
             modifier = modifier
                 .height(560.dp)
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter), // Align to the bottom
+                .align(Alignment.BottomCenter),
             shape = RoundedCornerShape(topStart = 56.dp, topEnd = 56.dp),
         ){
-            // Content for the white Surface
             Column(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,7 +160,6 @@ fun SignInScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    // Garis
                     Divider(
                         modifier = Modifier
                             .weight(1f)
@@ -177,7 +168,6 @@ fun SignInScreen(
                         color = neutralColor1
                     )
 
-                    // Teks di tengah garis
                     Text(
                         text = "Or",
                         style = MaterialTheme.typography.headlineMedium,
@@ -185,12 +175,11 @@ fun SignInScreen(
                         color = neutralColor1
                     )
 
-                    // Garis (bagian kedua)
                     Divider(
                         modifier = Modifier
                             .weight(1f)
                             .height(2.dp)
-                            .padding(start = 8.dp),  // Jarak antara teks dan garis
+                            .padding(start = 8.dp),
                         color = neutralColor1
                     )
                 }

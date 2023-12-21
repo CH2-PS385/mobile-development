@@ -8,11 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ch2ps385.nutrimate.common.Resource
-import com.ch2ps385.nutrimate.data.remote.model.AddMealPlanner
 import com.ch2ps385.nutrimate.data.remote.model.AddWaterIntake
-import com.ch2ps385.nutrimate.data.remote.model.GetMealPlanner
 import com.ch2ps385.nutrimate.data.remote.model.GetWaterIntake
-import com.ch2ps385.nutrimate.data.remote.responses.AddMealPlannerResponse
 import com.ch2ps385.nutrimate.data.remote.responses.AddWaterIntakeResponse
 import com.ch2ps385.nutrimate.data.remote.responses.GetWaterIntakeResponse
 import com.ch2ps385.nutrimate.data.repository.UserRepository
@@ -30,11 +27,9 @@ class ReminderViewModel(private val repository: UserRepository): ViewModel() {
         MutableStateFlow(Resource.Loading())
     val stateGetWaterIntake: StateFlow<Resource<GetWaterIntakeResponse>> get() = _stateGetWaterIntake
 
-    // Menggunakan State bukan mutableStateOf untuk isDialogShown
     private val _isDialogShown = mutableStateOf(false)
     val isDialogShown: State<Boolean> get() = _isDialogShown
 
-    // Mengganti nilai properti isDialogShown
     fun onAddClick() {
         _isDialogShown.value = true
     }
@@ -44,7 +39,6 @@ class ReminderViewModel(private val repository: UserRepository): ViewModel() {
     }
     fun addWaterIntake(addWaterIntake: AddWaterIntake){
         viewModelScope.launch {
-//            _stateAddWaterIntake.value = Resource.Initial()
             try {
                 _stateAddWaterIntake.value = Resource.Loading()
                 Log.d("RecommendationViewModel", "Before calling repository.addWaterIntake")

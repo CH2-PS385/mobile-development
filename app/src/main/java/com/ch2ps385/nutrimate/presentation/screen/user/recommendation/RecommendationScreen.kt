@@ -5,8 +5,6 @@ import android.content.ContentValues.TAG
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,12 +47,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.ch2ps385.nutrimate.R
 import com.ch2ps385.nutrimate.common.Resource
 import com.ch2ps385.nutrimate.data.remote.UserData
@@ -73,16 +69,12 @@ import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor4
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor6
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSinopia
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSmashedPumpkin
-import com.maxkeppeker.sheets.core.models.base.UseCaseState
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import com.maxkeppeler.sheets.state.StateDialog
-import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
-import com.maxkeppeler.sheets.state.StateDialog
-import com.maxkeppeler.sheets.state.models.ProgressIndicator
 import com.maxkeppeler.sheets.state.models.State
 import com.maxkeppeler.sheets.state.models.StateConfig
 import kotlinx.coroutines.delay
@@ -106,22 +98,6 @@ fun RecommendationScreen(
     var selectedDate by remember {
         mutableStateOf<LocalDate?>(null)
     }
-
-
-
-//    val progress = remember { mutableStateOf(0f) }
-//    val progressAnimated = animateFloatAsState(targetValue = progress.value, tween(1000)).value
-//    LaunchedEffect(Unit) {
-//        progress.value = 1f
-//    }
-//
-//    val progressBar = rememberUseCaseState()
-//    val state = State.Loading("Wait a moment", ProgressIndicator.Circular(progressAnimated))
-//    StateDialog(
-//        state = progressBar,
-//        config = StateConfig(state = state),
-//    )
-
 
     val successAddState = rememberUseCaseState()
     val successConfigState = State.Success(labelText = "Meal planner has been generated sucessfully!")
@@ -342,16 +318,12 @@ fun RecommendationScreen(
                 is Resource.Initial -> {}
                 is Resource.Loading ->{
                     Log.d(TAG, "Loading of Generating New Planner...")
-//                    sheetState.show()
-//                    progressBar.show()
 
                     if (viewModel.isDialogLoadingShown.value) {
                         FetchLoading(closeSelection = { viewModel.onDismissLoadingDialog() })
                     }
                 }
                 is Resource.Success -> {
-//                    progressBar.finish()
-//                    sheetState.finish()
                     LaunchedEffect(Unit) {
                         val currentDate = selectedDate ?: LocalDate.now()
                         val dd: Int = currentDate.dayOfMonth
@@ -371,7 +343,7 @@ fun RecommendationScreen(
                     LaunchedEffect(Unit){
                         if(viewModel.isDialogShown.value){
                             successAddState.show()
-                            delay(3000)
+                            delay(2000)
                             successAddState.finish()
                             viewModel.onDismissDialog()
                         }
@@ -381,8 +353,8 @@ fun RecommendationScreen(
                 is Resource.Error -> {
                     LaunchedEffect(Unit){
                         if(viewModel.isDialogShown.value){
-                            successAddState.show()
-                            delay(3000)
+                            failedAddState.show()
+                            delay(1000)
                             failedAddState.finish()
                             viewModel.onDismissDialog()
                         }
@@ -405,7 +377,6 @@ fun PostRecommendationContent(
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             contentPadding = PaddingValues(vertical = 16.dp),
-//            horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = modifier
         ){
@@ -555,14 +526,3 @@ fun GetRecommendationContent(
         Text(text = "DATA KOSONG")
     }
 }
-
-//
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Composable
-//@Preview(showBackground = true)
-//fun RecommendationScreenPreview() {
-//    RecommendationScreen(
-//        navController = rememberNavController(),
-//        userData = null // Isi dengan data pengguna default atau null jika tidak ada
-//    )
-//}

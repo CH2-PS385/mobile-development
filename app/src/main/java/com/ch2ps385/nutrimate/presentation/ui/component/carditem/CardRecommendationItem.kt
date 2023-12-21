@@ -1,7 +1,5 @@
 package com.ch2ps385.nutrimate.presentation.ui.component.carditem
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,9 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.ch2ps385.nutrimate.R
-import com.ch2ps385.nutrimate.common.Constants
-import com.ch2ps385.nutrimate.data.remote.responses.GetDataMealPlanner
-import com.ch2ps385.nutrimate.data.remote.responses.PostDataMealPlanner
 import com.ch2ps385.nutrimate.presentation.ui.theme.NutriMateTheme
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor1

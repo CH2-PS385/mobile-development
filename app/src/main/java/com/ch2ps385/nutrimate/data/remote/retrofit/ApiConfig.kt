@@ -1,7 +1,6 @@
 package com.ch2ps385.nutrimate.data.remote.retrofit
 
 import com.ch2ps385.nutrimate.common.Constants.BASE_URL
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

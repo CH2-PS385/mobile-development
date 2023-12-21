@@ -40,7 +40,6 @@ class UserPreferencesViewModel(private val repository : UserRepository):ViewMode
     fun onDismissLoadingDialog(){
         _isDialogLoadingShown.value = false
     }
-    // Mengganti nilai properti isDialogShown
     fun onSavePreferencesClick() {
         _isDialogLoadingShown.value = true
     }
@@ -117,16 +116,4 @@ class UserPreferencesViewModel(private val repository : UserRepository):ViewMode
 
 
 
-    // Add other functions as needed for your use case
-
-    // Example of a function to save preferences
-    fun savePreferences() {
-        // Implement your logic to save preferences here
-        // You can access the state variables using the corresponding properties
-    }
 }
-
-//enum class Gender {
-//    Male,
-//    Female
-//}

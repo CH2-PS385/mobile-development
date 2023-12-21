@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.ch2ps385.nutrimate.R
 import com.ch2ps385.nutrimate.data.remote.responses.GetDataMealPlanner
-import com.ch2ps385.nutrimate.data.remote.responses.GetMealPlannerResponse
 import com.ch2ps385.nutrimate.presentation.ui.theme.Shapes
 import com.ch2ps385.nutrimate.presentation.ui.theme.neutralColor5
 import com.ch2ps385.nutrimate.presentation.ui.theme.pSmashedPumpkin
@@ -167,12 +166,3 @@ fun CardMenuItemList(
 
 }
 
-//@Composable
-//@Preview(showBackground = true)
-//fun CardMenuItemListPreview(){
-//    NutriMateTheme{
-//        CardMenuItemList(
-//            menu = Menu(R.drawable.menu1,"Rendang", "225 cal", "Real food", "Baked"),
-//        )
-//    }
-//}
